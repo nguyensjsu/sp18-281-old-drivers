@@ -1,8 +1,9 @@
 # cmpe281-old-drivers
 
-
 ### Team member
-### touhaonanjishi
-### Lao Han
-### 91 Mr.zhu
-### Shuai Ge
+### Yue Yin
+### Han Chen
+### Yilun Zhu
+### Yiming Zhai
+
+### Project Kick off (04/10/2018)
