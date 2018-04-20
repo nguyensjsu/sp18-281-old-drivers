@@ -95,29 +95,53 @@ All orders belone to the user
 
 #### 3.5 Inventory Subsystem
 ---
+Data Stucture
+```
+struct Inventory {
+    String inventoryId;
+    String inventoryName;
+    Double inventoryPrice;
+    Integer inventoryLeft;
+}
+```
+
+APIs
+
 * Get inventory
+```
+Method 'GET'
+https://localhost:8000/inventory/id
 
-    https://localhost:8000/inventory/id
-
-    Method 'GET'
+Return:
+Jsonized inventory struct
+```
 
 * Add inventory
+```
+Method 'POST'
+https://localhost:8000/inventory?name=blacktea&price=10&inventory=100
 
-    https://localhost:8000/inventory?name=blacktea&price=10&inventory=100
-
-    Method 'POST'
+Return:
+Jsonized inventory struct
+```
 
 * Update inventory
+```
+Method 'PUT'
+https://localhost:8000/inventory/id?price=20&inventory=99
 
-    https://localhost:8000/inventory/id?price=20&inventory=99
-
-    Method 'PUT'
+Return:
+Jsonized inventory struct
+```
 
 * Delete inventory
+```
+Method 'DELETE'
+https://localhost:8000/inventory/id
 
-    https://localhost:8000/inventory/id
-
-    Method 'DELETE'
+Return:
+Status code 200.
+```
 
 #### 3.6 User Management Subsystem
 ---
