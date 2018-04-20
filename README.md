@@ -7,4 +7,4 @@
 |   Yilun Zhu   |
 |  Yiming Zhai  |
 
-### Project Kick off (04/10/2018)
+### Project implementation Kick off (04/10/2018)
