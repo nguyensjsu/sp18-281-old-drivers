@@ -165,6 +165,7 @@ https://localhost:8000/user/username
 
 Return:
 Status code 200.
+```
 
 #### 3.7 Product Review & Comments Subsystem
 ---
