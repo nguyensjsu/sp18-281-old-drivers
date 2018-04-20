@@ -20,31 +20,36 @@ Week3: (4/8/18-4/15/18)
 ```
 
 
-### 1. Introduction of The Project
+### 1. Introduction of The Project (04/16/2018)
+---
+In this project, we decide to create a Starbucks Online Order System. Customers can use this to register, make an online order, check order status, make comments etc. The owner can recevice the order, process it, and also manage the stock, check reviews of each item.
+
+
+### 2. Architecture Diagram (04/16/2018)
+---
+This section our team members discussed the roadmap of our project, figure out the tech stack and architecure of the system. As int the figure below, the frontend will be writen by JS, and we use Kong as API Gateway to route API calls to different sub-module. Each module uses Redis as backend database, and Redis is configured in replication mode, at this time, we have not decided how to handle network partition.
+
+### 3. System Design (04/18/2018)
+---
+
+#### 3.1 Overview
 ---
 In this project we will build an online Starbucks system. This system contains four main modules
+
 * Order subsystem
 * Inventory subsystem
 * User management subsystem
 * Product review & comments subsystem
 
-### 2. Architecture Diagram
+Each module is binded with an API server. Each API server interacts with backend database directly, which is [Redis](https://redis.io/) cluster in this project. For simplicity, we use [Kong](https://getkong.org/about/) as an API gateway to route each call to the related API server. We deploy the backend Redis cluster in replication mode. Each quorum has 5 nodes and each module is related to on quorum. [Heroku](https://dashboard.heroku.com/) is used to deploy the application.
+
+#### 3.2 UI Design (04/18/2018)
 ---
 
-### 3. System Design
+#### 3.3 Kong API Gateway (04/18/2018)
 ---
 
-#### 3.1 Overview
----
-This system contains 4 modules, each module is binded with an API server. Each API server interacts with backend database directly, which is [Redis](https://redis.io/) cluster in this project. For simplicity, we use [Kong](https://getkong.org/about/) as an API gateway to route each call to the related API server. We deploy the backend Redis cluster in replication mode. Each quorum has 5 nodes and each module is related to on quorum. [Heroku](https://dashboard.heroku.com/) is used to deploy the application.
-
-#### 3.2 UI Design
----
-
-#### 3.3 Kong API Gateway
----
-
-#### 3.4 Order Subsystem
+#### 3.4 Order Subsystem (04/18/2018)
 ---
 
 Data Structure
@@ -92,7 +97,7 @@ Method: DELETE
 /order/{orderid}
 
 Response:
-OK status
+HTTP 204
 ```
 
 * Get Order
@@ -113,7 +118,9 @@ Response:
 All orders belone to the user
 ```
 
-#### 3.5 Inventory Subsystem
+The main challenge here is that, for each write operation, we need to update two different data structures, it may casuse data inconsistance if a failure happns during the operation. Here we use transaction provided by Redis to handle the problem.
+
+#### 3.5 Inventory Subsystem (04/18/2018)
 ---
 Data Stucture
 ```
@@ -130,7 +137,7 @@ APIs
 * Get inventory
 ```
 Method 'GET'
-https://localhost:8000/inventory/id
+/inventory/{id}
 
 Return:
 Jsonized inventory struct
@@ -139,7 +146,7 @@ Jsonized inventory struct
 * Add inventory
 ```
 Method 'POST'
-https://localhost:8000/inventory?name=blacktea&price=10&inventory=100
+/inventory?name=blacktea&price=10&inventory=100
 
 Return:
 Jsonized inventory struct
@@ -148,7 +155,7 @@ Jsonized inventory struct
 * Update inventory
 ```
 Method 'PUT'
-https://localhost:8000/inventory/id?price=20&inventory=99
+/inventory/id?price=20&inventory=99
 
 Return:
 Jsonized inventory struct
@@ -157,18 +164,18 @@ Jsonized inventory struct
 * Delete inventory
 ```
 Method 'DELETE'
-https://localhost:8000/inventory/id
+/inventory/{id}
 
 Return:
-Status code 200.
+Status code 204.
 ```
 
-#### 3.6 User Management Subsystem
+#### 3.6 User Management Subsystem (04/18/2018)
 
 * Add a new user
 ```
 Method 'POST'
-https://localhost:8000/user?username=email_address&password=123456&firstname=leo&lastname=Peterson&phone=1234567788
+/user?username=email_address&password=123456&firstname=leo&lastname=Peterson&phone=1234567788
 
 Return:
 Status code 200
@@ -181,28 +188,31 @@ Status code 200
 * Delete user information
 ```
 Method 'DELETE'
-https://localhost:8000/user/username
+/user/{userid}
 
 Return:
-Status code 200.
+Status code 204.
 ```
 
-#### 3.7 Product Review & Comments Subsystem
+#### 3.7 Product Review & Comments Subsystem (04/18/2018)
 ---
 
-#### 3.8 Error Handling
+#### 3.8 Error Handling (04/18/2018)
 ---
 
-### 4. System APIs
+### 4. System APIs (04/19/2018)
 ---
 
-### 5. Kong Configuration
+### 5. Kong Configuration (04/19/2018)
 ---
 
-### 6. Redis Configuration
+### 6. Redis Configuration (04/19/2018)
 ---
 
-### 7. Summary
+### 7. Implementation (04/20/2018)
+
+
+### 8. Summary
 ---
 
 ### Appendix
