@@ -29,6 +29,29 @@ This system contains 4 modules, each module is binded with an API server. Each A
 
 #### 3.5 Inventory Subsystem
 ---
+* Get inventory
+
+    https://localhost:8000/inventory/id
+
+    Method 'GET'
+
+* Add inventory
+
+    https://localhost:8000/inventory?name=blacktea&price=10&inventory=100
+
+    Method 'POST'
+
+* Update inventory
+
+    https://localhost:8000/inventory/id?price=20&inventory=99
+
+    Method 'PUT'
+
+* Delete inventory
+
+    https://localhost:8000/inventory/id
+
+    Method 'DELETE'
 
 #### 3.6 User Management Subsystem
 ---
