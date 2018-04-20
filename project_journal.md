@@ -204,3 +204,10 @@ Status code 200.
 
 ### 7. Summary
 ---
+
+### Appendix
+---
+[Redis](https://redis.io/)
+[Redis SDK](https://github.com/go-redis/redis)
+[Kong](https://getkong.org/about/)
+[Heroku](https://dashboard.heroku.com/)
