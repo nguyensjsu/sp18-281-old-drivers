@@ -1,6 +1,12 @@
 # Startbucks Online System
 
 ### Weekly Progress and Challenge
+---
+```
+Week 1: (3/24/18-3/31/18) 
+	* Weekly progress:
+	* Challenge:
+``` 
 
 ### 1. Introduction of The Project
 ---
