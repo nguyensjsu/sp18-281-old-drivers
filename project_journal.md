@@ -1,5 +1,7 @@
 # Startbucks Online System
 
+### Weekly Progress and Challenge
+
 ### 1. Introduction of The Project
 ---
 In this project we will build an online Starbucks system. This system contains four main modules
