@@ -144,7 +144,27 @@ Status code 200.
 ```
 
 #### 3.6 User Management Subsystem
----
+
+* Add a new user
+```
+Method 'POST'
+https://localhost:8000/user?username=email_address&password=123456&firstname=leo&lastname=Peterson&phone=1234567788
+
+Return:
+Status code 200
+```
+
+* User Authentication
+```
+```
+
+* Delete user information
+```
+Method 'DELETE'
+https://localhost:8000/user/username
+
+Return:
+Status code 200.
 
 #### 3.7 Product Review & Comments Subsystem
 ---
