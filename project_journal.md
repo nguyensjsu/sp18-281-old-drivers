@@ -27,6 +27,72 @@ This system contains 4 modules, each module is binded with an API server. Each A
 #### 3.4 Order Subsystem
 ---
 
+Data Structure
+```
+struct Order {
+	string orderId;
+	string userId;
+	List<string> items;
+	int status; // 0 for created, 1 for completed, 2 for failed
+}
+```
+
+Database Schema
+```
+1. Use Redis SET APIs to store order info
+   Key is order id, and value is a jsonized order struct
+
+2. Use Redis LIST APIs to storge users' order info
+   Key is user id, and value is all the orders the user made
+```
+
+APIs
+
+* Create Order
+```
+Method: POST
+/order?userid=xxx&items=xxx,yyy,zzz
+
+Response:
+Jsonized order structure
+```
+
+* Update Order
+```
+Method: POST
+/order/{orderid}?add=xx,yy&delete=zz
+
+Response:
+Jsonized order structure
+```
+
+* Delete Order
+```
+Method: DELETE
+/order/{orderid}
+
+Response:
+OK status
+```
+
+* Get Order
+```
+Method: GET
+/order/{orderid}
+
+Response:
+Jsonized Order struct or 404 error code if not exist
+```
+
+* Get user orders
+```
+Method: GET
+/order?userid=xxx
+
+Response:
+All orders belone to the user
+```
+
 #### 3.5 Inventory Subsystem
 ---
 * Get inventory
