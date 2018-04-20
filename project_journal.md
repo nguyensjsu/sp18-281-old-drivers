@@ -4,9 +4,21 @@
 ---
 ```
 Week 1: (3/24/18-3/31/18) 
-	* Weekly progress:
-	* Challenge:
+	* Weekly progress: Understanding the final project requirements, analyze and compare different catagories
+			in order to find the best topic that can be used and implemented for this final project. 
+	* Challenge: Have not started on personal project part, so that it is hard to pick a good topic at this moment.
 ``` 
+```
+Week 2: (4/1/18-4/7/18)
+        * Weekly progress: 
+        * Challenge:
+```
+```
+Week3: (4/8/18-4/15/18)
+        * Weekly progress: 
+        * Challenge:
+```
+
 
 ### 1. Introduction of The Project
 ---
