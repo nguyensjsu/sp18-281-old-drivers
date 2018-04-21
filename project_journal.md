@@ -58,6 +58,7 @@ struct Order {
 	string orderId;
 	string userId;
 	List<string> items;
+	Date date;
 	int status; // 0 for created, 1 for completed, 2 for failed
 }
 ```
