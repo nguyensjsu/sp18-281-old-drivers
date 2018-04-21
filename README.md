@@ -1,4 +1,4 @@
-# cmpe281-old-drivers
+# CMPE281-old-drivers
 
 | Team Members  |
 | ------------- |
