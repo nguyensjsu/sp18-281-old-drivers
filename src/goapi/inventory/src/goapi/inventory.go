@@ -70,14 +70,14 @@ func addInventoryHandler(formatter *render.Render) http.HandleFunc {
 
 
 
-
+		/*
 		client {
 			inventoryId:	uuid.String(),
 			inventoryName:	r.FormValue("name"),
 			inventoryPrice: r.FormValue("price"),
 			inventoryLeft:  r.FormValue("amount"),
 		}
-
+		*/
 
 		
 
