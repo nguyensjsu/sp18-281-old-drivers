@@ -147,7 +147,7 @@ Jsonized inventory struct
 * Add inventory
 ```
 Method 'POST'
-/inventory?name=blacktea&price=10&inventory=100
+/inventory?name=blacktea&price=10&amount=100
 
 Return:
 Jsonized inventory struct
@@ -156,7 +156,7 @@ Jsonized inventory struct
 * Update inventory
 ```
 Method 'PUT'
-/inventory/id?price=20&inventory=99
+/inventory/id?price=20&amount=99
 
 Return:
 Jsonized inventory struct
