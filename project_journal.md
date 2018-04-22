@@ -10,13 +10,28 @@ Week 1: (3/24/18-3/31/18)
 ``` 
 ```
 Week 2: (4/1/18-4/7/18)
-        * Weekly progress: 
-        * Challenge:
+    * Weekly progress: Team members are still working on individual project part, such as Redis DB installtion and configuration part on EC2 instances.
+    * Challenge: Testing on AP.
 ```
 ```
-Week3: (4/8/18-4/15/18)
-        * Weekly progress: 
-        * Challenge:
+Week3: (4/7/18-4/14/18)
+    * Weekly progress: Discuss on how to combine individual's pieces on team project, and the selection on deployment mode for Redis and network routing.  
+    * Challenge: Combine individual's pieces on team project, and the selection on deployment mode for Redis and network routing.
+```
+```
+Week4: (4/14/18-4/21/18)
+    * Weekly progress: Starting working on architecture of team project. We decide to work on coffee order system. You can see more detail on each section in below. 
+    * Challenge: Implementation, Testing part on each API.
+```
+```
+Week5: (4/21/18-4/28/18)
+    * Weekly progress: 
+    * Challenge:
+```
+```
+Week6: (4/28/18-5/4/18)
+    * Weekly progress: 
+    * Challenge:
 ```
 
 
@@ -147,11 +162,7 @@ Jsonized inventory struct
 * Add inventory
 ```
 Method 'POST'
-<<<<<<< HEAD
-/inventory?name=blacktea&price=10&inventory=100
-=======
 /inventory?name=blacktea&price=10&amount=100
->>>>>>> f3b412f7ed996b1f85c97b79d5918d3c47fd245e
 
 Return:
 Jsonized inventory struct
