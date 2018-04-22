@@ -2,21 +2,15 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
 	"github.com/codegangsta/negroni"
 	"github.com/gorilla/mux"
-	"github.com/satori/go.uuid"
-	"github.com/streadway/amqp"
-	"github.com/unrolled/render"
-	"gopkg.in/mgo.v2"
-	"gopkg.in/mgo.v2/bson"
 	"log"
 	"net/http"
 	"strings"
 )
 
-var redis_master_name = "redis-master"
-var redis_sentinel_addr = "127.0.0.1:26379"
+var redis_server_ip = "127.0.0.1"
+var redis_server_port = 6379
 
 type OrderServer struct {
 	om         *OrderManager
@@ -27,15 +21,17 @@ type OrderServer struct {
 func NewServer() *OrderServer {
 	n := negroni.Classic()
 	orderServer := &OrderServer{
-		om:         NewOrderManager(redis_master_name, redis_sentinel_addr),
+		om:         NewOrderManager(redis_server_ip, redis_server_port),
 		httpServer: n}
+	log.Println("Create OrderServer")
 	return orderServer
 }
 
 func (os *OrderServer) Init() {
 	mx := mux.NewRouter()
-	initRoutes(mx, formatter)
-	n.UseHandler(mx)
+	os.initRouteTable(mx)
+	os.httpServer.UseHandler(mx)
+	log.Println("Init HTTP Request Route")
 }
 
 func (os *OrderServer) Run() {
@@ -43,17 +39,17 @@ func (os *OrderServer) Run() {
 }
 
 func (os *OrderServer) initRouteTable(mx *mux.Router) {
-	mx.HandleFunc("/order", createOrder).Methods("POST")
-	mx.HandleFunc("/order/{orderid}", getOrder).Methods("GET")
-	mx.HandleFunc("/order/{orderid}", updateOrder).Methods("POST")
-	mx.HandleFunc("/order/{orderid}", deleteOrder).Methods("DELETE")
-	mx.HandleFunc("/order", getOrderByUser).Methods("GET")
+	mx.HandleFunc("/order", os.createOrder).Methods("POST")
+	mx.HandleFunc("/order/{orderid}", os.getOrder).Methods("GET")
+	mx.HandleFunc("/order/{orderid}", os.updateOrder).Methods("POST")
+	mx.HandleFunc("/order/{orderid}", os.deleteOrder).Methods("DELETE")
+	mx.HandleFunc("/order", os.getOrderByUser).Methods("GET")
 }
 
 func (os *OrderServer) getOrder(w http.ResponseWriter, req *http.Request) {
 	params := mux.Vars(req)
 	orderId := params["orderid"]
-	val, ok := om.GetOrder(orderId)
+	val, ok := os.om.GetOrder(orderId)
 	if !ok {
 		w.WriteHeader(http.StatusNotFound)
 		w.Write([]byte("Order not exist"))
@@ -61,6 +57,7 @@ func (os *OrderServer) getOrder(w http.ResponseWriter, req *http.Request) {
 		w.WriteHeader(http.StatusOK)
 		w.Write([]byte(val))
 	}
+	log.Printf("GET Order %v\n", ok)
 }
 
 func (os *OrderServer) createOrder(w http.ResponseWriter, req *http.Request) {
@@ -71,8 +68,8 @@ func (os *OrderServer) createOrder(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	items := strings.Split(req.FromValue("items"), ",")
-	val, ok := om.CreateOrder(userId, items)
+	items := strings.Split(req.FormValue("items"), ",")
+	val, ok := os.om.CreateOrder(userId, items)
 	if !ok {
 		w.WriteHeader(http.StatusBadRequest)
 		w.Write([]byte("Order not exist"))
@@ -80,21 +77,22 @@ func (os *OrderServer) createOrder(w http.ResponseWriter, req *http.Request) {
 		w.WriteHeader(http.StatusCreated)
 		w.Write([]byte(val))
 	}
+	log.Printf("CREATE Order %v\n", ok)
 }
 
 func (os *OrderServer) updateOrder(w http.ResponseWriter, req *http.Request) {
 	params := mux.Vars(req)
 	orderId := params["orderid"]
 	var order Order
-	orderJson, ok := om.GetOrder(orderId)
+	orderJson, ok := os.om.GetOrder(orderId)
 	if !ok {
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
 
-	err := json.Unmarshal([]byte(orderJson), &order)
-	addItems := strings.Split(req.FromValue("add"), ",")
-	delItems := strings.Split(req.FromValue("delete"), ",")
+	json.Unmarshal([]byte(orderJson), &order)
+	addItems := strings.Split(req.FormValue("add"), ",")
+	delItems := strings.Split(req.FormValue("delete"), ",")
 
 	items := make(map[string]string)
 	for _, item := range order.Items {
@@ -113,7 +111,7 @@ func (os *OrderServer) updateOrder(w http.ResponseWriter, req *http.Request) {
 	for k, _ := range items {
 		order.Items = append(order.Items, k)
 	}
-	ok := om.UpdateOrder(&order)
+	ok = os.om.UpdateOrder(&order)
 	if !ok {
 		w.WriteHeader(http.StatusBadRequest)
 		w.Write([]byte("Update order failed"))
@@ -122,12 +120,13 @@ func (os *OrderServer) updateOrder(w http.ResponseWriter, req *http.Request) {
 		w.WriteHeader(http.StatusOK)
 		w.Write(buf)
 	}
+	log.Printf("UPDATE Order %v\n", ok)
 }
 
 func (os *OrderServer) deleteOrder(w http.ResponseWriter, req *http.Request) {
 	params := mux.Vars(req)
 	orderId := params["orderid"]
-	ok := om.DeleteOrder(orderId)
+	ok := os.om.DeleteOrder(orderId)
 	if !ok {
 		w.WriteHeader(http.StatusBadRequest)
 		w.Write([]byte("Delete order failed"))
@@ -135,6 +134,7 @@ func (os *OrderServer) deleteOrder(w http.ResponseWriter, req *http.Request) {
 		w.WriteHeader(http.StatusNoContent)
 		w.Write([]byte("Delete order Successfully"))
 	}
+	log.Printf("DELETE Order %v\n", ok)
 }
 
 func (os *OrderServer) getOrderByUser(w http.ResponseWriter, req *http.Request) {
@@ -145,7 +145,7 @@ func (os *OrderServer) getOrderByUser(w http.ResponseWriter, req *http.Request) 
 		return
 	}
 
-	orders, ok := om.GetOrderByUser(userId)
+	orders, ok := os.om.GetOrderByUser(userId)
 	if !ok {
 		w.WriteHeader(http.StatusBadRequest)
 		w.Write([]byte("Get order by user failed"))
@@ -154,4 +154,5 @@ func (os *OrderServer) getOrderByUser(w http.ResponseWriter, req *http.Request) 
 		w.WriteHeader(http.StatusOK)
 		w.Write(buf)
 	}
+	log.Printf("GET_ORDER_BY_USER Order %v\n", ok)
 }

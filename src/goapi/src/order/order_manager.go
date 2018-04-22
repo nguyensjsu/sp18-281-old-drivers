@@ -8,7 +8,7 @@ import (
 )
 
 type OrderManager struct {
-	redisClient *Client
+	redisClient *redis.Client
 }
 
 type OrderStatus int
@@ -27,10 +27,10 @@ type Order struct {
 	Status  OrderStatus
 }
 
-func NewOrderManager(master string, sentinels []string) *OrderManager {
-	client := redis.NewFailoverClient(&redis.FailoverOption{
-		MasterName:    master,
-		SentinelAddrs: sentinels})
+func NewOrderManager(ipAddr string, port int) *OrderManager {
+	addr := ipAddr + ":" + string(port)
+	client := redis.NewClient(&redis.Options{
+		Addr: addr})
 
 	om := &OrderManager{
 		redisClient: client}
@@ -43,11 +43,11 @@ func (om *OrderManager) isOpen() bool {
 
 // return OrderJsonString, success
 func (om *OrderManager) GetOrder(orderId string) (string, bool) {
-	if !isOpen() {
+	if !om.isOpen() {
 		return "", false
 	}
 
-	val, err := om.redisClient.Get(order).Result()
+	val, err := om.redisClient.Get(orderId).Result()
 	if err != nil {
 		return "", false
 	}
@@ -55,7 +55,7 @@ func (om *OrderManager) GetOrder(orderId string) (string, bool) {
 }
 
 func (om *OrderManager) UpdateOrder(newOrder *Order) bool {
-	if !isOpen() {
+	if !om.isOpen() {
 		return false
 	}
 	buf, err := json.Marshal(newOrder)
@@ -64,20 +64,19 @@ func (om *OrderManager) UpdateOrder(newOrder *Order) bool {
 	}
 
 	val := string(buf[:])
-	err := om.redisClient.Set(newOrder.OrderId, val).Err()
-	if err != nil {
+	if err := om.redisClient.Set(newOrder.OrderId, val, 0).Err(); err != nil {
 		return false
 	}
 	return true
 }
 
 // Return true on success
-func (om *OrderManager) DeleteOrder(orderId) bool {
-	if !isOpen() {
+func (om *OrderManager) DeleteOrder(orderId string) bool {
+	if !om.isOpen() {
 		return false
 	}
 
-	_, err := om.redisClient.Del(orderid)
+	err := om.redisClient.Del(orderId)
 	if err != nil {
 		return false
 	}
@@ -85,8 +84,8 @@ func (om *OrderManager) DeleteOrder(orderId) bool {
 }
 
 func (om *OrderManager) CreateOrder(userId string, items []string) (string, bool) {
-	if !isOpen() {
-		return false
+	if !om.isOpen() {
+		return "", false
 	}
 	uuid, _ := uuid.NewV4()
 	order := &Order{
@@ -104,37 +103,33 @@ func (om *OrderManager) CreateOrder(userId string, items []string) (string, bool
 	// Use redis Pipeline
 	pipe := om.redisClient.Pipeline()
 	// Add to order set
-	err := pipe.Set(order.OrderId, val)
-	if err != nil {
+	if err := pipe.Set(order.OrderId, val, 0); err != nil {
 		return "", false
 	}
 	// Add to user list
-	_, err := pipe.RPush(userId, order.OrderId)
-	if err != nil {
+	if err := pipe.RPush(userId, order.OrderId).Err(); err != nil {
 		return "", false
 	}
 
-	_, err := pipe.Exec()
-	if err != nil {
+	if _, err := pipe.Exec(); err != nil {
 		return "", false
 	}
 	return val, true
 }
 
 func (om *OrderManager) GetOrderByUser(userId string) ([]string, bool) {
-	if !isOpen() {
+	if !om.isOpen() {
 		return nil, false
 	}
-	om.redisClient
 	// Get list length
 	len, err := om.redisClient.LLen(userId).Result()
 	if err != nil {
-		return "", false
+		return nil, false
 	}
 	// Get order ids
 	ids, err := om.redisClient.LRange(userId, 0, len-1).Result()
 	if err != nil {
-		return "", false
+		return nil, false
 	}
 
 	var orders []string
