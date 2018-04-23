@@ -10,6 +10,7 @@ import (
 	"net/url"
 	"github.com/satori/go.uuid"
 	"github.com/unrolled/render"
+	"strconv"
 )
 
 
@@ -42,7 +43,7 @@ func (im *InventoryManager) isOpen() bool {
 }
 
 // get all inventory
-func (im *InventoryManager) GetAllInventory(inventory *Inventory) ([]string, bool) {
+func (im *InventoryManager) GetAllInventory() (map[string]string, bool) {
 	if !im.isOpen() {
 		return "", false
 	}
@@ -61,15 +62,20 @@ func (im *InventoryManager) GetAllInventory(inventory *Inventory) ([]string, boo
 	    if cursor == 0 {
 	        break
     	}
-	} // n represents the total of keys
+	} // n represents the sum of keys
 
 
-	var inventoryList []string
+	// create map store all the key-value pair
+	var inventoryMap map[string]string
     for i := 0; i < n; i++ {
-    	inventoryList.append(inventory[i])
+
+    	iid, _ := im.redisClient.MGET("key" + strconv.Itoa(i))
+    	val, _ := im.redisClient.GET(iid)
+    	inventoryMap[iid] = val
+
     }
 
-    return inventoryList, true
+    return inventoryMap, true
 }
 
 

@@ -51,7 +51,7 @@ func (is *InventoryServer) initRoutesTable(mx *mux.Router) {
 
 // API Get All Inventorys
 func (is *InventoryServer) getInventorysHandler(w http.ResponseWriter, r *http.Request) {
-	// not working!
+	
 	val, ok := is.im.GetAllInventory()
 
 	if !ok {
@@ -62,7 +62,7 @@ func (is *InventoryServer) getInventorysHandler(w http.ResponseWriter, r *http.R
 		w.Write([]byte(val))
 	}
 
-	log.Printf("GET Inventory %v\n", ok)
+	log.Printf("GET All Inventory %v\n", ok)
 
 }
 
@@ -87,12 +87,58 @@ func (is *InventoryServer) getInventoryHandler(w http.ResponseWriter, r *http.Re
 // API Add Inventory
 func (is *InventoryServer) addInventoryHandler(w http.ResponseWriter, r *http.Request) {
 	
+	name := r.FormValue("name")
+	price := float32(r.FormValue("price"))
+	amount := uint32(r.FormValue("amount"))
+
+	if inventoryName == nil || inventoryPrice == nil || amount == nil {
+		w.WriteHeader(http.StatusBadRequest)
+		w.WriteHeader("Invalid parameters")
+	}
+	
+	val, ok := is.im.CreateInventory(name, price, amount)
+	if !ok {
+		w.WriteHeader(http.StatusBadRequest)
+		w.WriteHeader("Inventory create failed")
+	}
+	else {
+		w.WriteHeader(http.StatusCreated)
+		w.WriteHeader("Inventory created!")
+	}
 }
+
 
 // API Update Inventory
 func (is *InventoryServer) updateInventoryHandler(w http.ResponseWriter, r *http.Request) {
-		
 	
+	param := mux.Var(r)
+	inventoryId := param["inventoryId"]
+
+	var inventory Inventory
+	inventoryJson, ok := is.io.GetInventory(inventoryId)
+	if !ok {
+		w.WriteHeader(http.StatusNotFound)
+		w.WriteHeader("Inventory Id doesn't exist")
+	}
+
+	json.Unmarshal([]byte(inventoryJson), &inventory)
+	// to be continue...
+	name := r.FormValue["name"]
+	price := r.FormValue["price"]
+	amount := r.FormValue["amount"]
+	inventory.InventoryName = name
+	inventory.InventoryPrice = price
+	inventory.Amount = amount
+
+	val, ok := is.im.UpdateInventory(inventory)
+	if !ok {
+		w.WriteHeader(http.StatusBadRequest)
+		w.WriteHeader("Update inventory failed")
+	}
+	else {
+		w.WriteHeader(http.StatusOK)
+		w.WriteHeader("Inventory updated!")
+	}
 }
 
 // API Delete Inventory
