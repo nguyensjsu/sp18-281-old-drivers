@@ -226,7 +226,7 @@ Jsonized user struct
 * Update user
 ```
 Method 'PUT'
-/user/id?balance=150
+/user/id?phone=1234567789&balance=150
 
 Return:
 Jsonized user struct
