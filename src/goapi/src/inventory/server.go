@@ -1,7 +1,7 @@
 package main
 
 import (
-	// "encoding/json"
+	"encoding/json"
 	"fmt"
 	"net/http"
 	"github.com/go-redis/redis"
@@ -11,91 +11,81 @@ import (
 	"github.com/unrolled/render"
 )
 
-func NewClient() {
-	client := redis.NewClient(&redis.Options{
-		Addr: 		"localhost:6379",
-		Password: 	"",
-		DB: 		1,
-		})
+var redis_server_ip = "127.0.0.1"
+var redis_server_port = 6379
 
-	pong, err := client.Ping().Result()
-	fmt.Println(pong, err)
+type InventoryServer struct {
+	im         *InventoryManager
+	httpServer *negroni.Negroni
+}
+
+func NewServer() *InventoryServer {
+	n := negroni.Classic()
+	inventoryServer := &InventoryServer{
+		im:         InventoryManager(redis_server_ip, redis_server_port),
+		httpServer: n}
+	log.Println("Create InventoryServer")
+	return orderServer
+}
+
+func (is *InventoryServer) Init() {
+	mx := mux.NewRouter()
+	is.initRouteTable(mx)
+	is.httpServer.UseHandler(mx)
+	log.Println("Init HTTP Request Route")
+}
+
+func (is *InventoryServer) Run() {
+	is.httpServer.Run()
 }
 
 // API Routes
-func initRoutes(mx *mux.Router, formatter *render.Render) {
-	mx.HandleFunc("/inventorys", getInventorysHandler(formatter)).Methods("GET")
-	mx.HandleFunc("/inventory/{id}", getInventoryHandler(formatter)).Methods("GET")
-	mx.HandleFunc("/inventory", addInventoryHandler(formatter)).Methods("POST")
-	mx.HandleFunc("/inventory/{id}", updateInventoryHandler(formatter)).Methods("PUT")
-	mx.HandleFunc("/inventory/{id}", gumballNewOrderHandler(formatter)).Methods("DELETE")
+func (is *InventoryServer) initRoutesTable(mx *mux.Router) {
+	mx.HandleFunc("/inventorys", is.getInventorysHandler()).Methods("GET")
+	mx.HandleFunc("/inventory/{id}", is.getInventoryHandler()).Methods("GET")
+	mx.HandleFunc("/inventory", is.addInventoryHandler()).Methods("POST")
+	mx.HandleFunc("/inventory/{id}", is.updateInventoryHandler()).Methods("PUT")
+	mx.HandleFunc("/inventory/{id}", is.gumballNewOrderHandler()).Methods("DELETE")
 }
 
 
-// API Get Inventorys
-func getInventorysHandler(formatter *render.Render) http.HandleFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-		
-		var cursor uint64
-		x := make(map[string][])
-		for i := 0; i < client.; i++ {
-			
-		}
-	}
+// API Get All Inventorys
+func (is *InventoryServer) getInventorysHandler(w http.ResponseWriter, r *http.Request) {
+
 }
 
 // API Get Inventory
-func getInventoryHandler(formatter *render.Render) http.HandleFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-		r, err := url.ParseForm(r)
-		if err != nil {
-			panic(err)
-		}
-		if len(r.Form["id"] > 0) {
-			formatter.JSON(w, http.StatusOK, client.HScan(cursor, r.FormValue["id"], ))
-		}
+func (is *InventoryServer) getInventoryHandler(w http.ResponseWriter, r *http.Request) {
+	r, err := url.ParseForm(r)
+	if err != nil {
+		panic(err)
 	}
+	if len(r.Form["id"] > 0) {
+		formatter.JSON(w, http.StatusOK, client.HScan(cursor, r.FormValue["id"], ))
+	}
+
 }
 
 // API Add Inventory
-func addInventoryHandler(formatter *render.Render) http.HandleFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-		r, err := url.ParseForm(r)
-		if err != nil {
-			panic(err)
-		}
-
-		uuid := uuid.NewV4()
-		client.HMset(uuid, inventoryId r.FormValue)
-
-
-
-		
-		client {
-			inventoryId:	uuid.String(),
-			inventoryName:	r.FormValue("name"),
-			inventoryPrice: r.FormValue("price"),
-			inventoryLeft:  r.FormValue("amount"),
-		}
-		
-
-		
-
-
-		
+func (is *InventoryServer) addInventoryHandler(w http.ResponseWriter, r *http.Request) {
+	r, err := url.ParseForm(r)
+	if err != nil {
+		panic(err)
 	}
+
+	uuid := uuid.NewV4()
+	client.HMset(uuid, inventoryId r.FormValue)
+
 }
 
 // API Update Inventory
-func updateInventoryHandler(formatter *render.Render) http.HandleFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
+func (is *InventoryServer) updateInventoryHandler(w http.ResponseWriter, r *http.Request) {
 		
-	}
+	
 }
 
 // API Delete Inventory
-func deleteInventoryHandler(formatter *render.Render) http.HandleFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
+func (is *InventoryServer) deleteInventoryHandler(w http.ResponseWriter, r *http.Request) {
 		
-	}
+	
 }
