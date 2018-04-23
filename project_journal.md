@@ -227,6 +227,7 @@ Jsonized user struct
 ```
 Method 'PUT'
 /user/id?balance=150
+
 Return:
 Jsonized user struct
 ```
