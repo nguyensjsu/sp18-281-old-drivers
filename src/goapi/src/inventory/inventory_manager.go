@@ -42,24 +42,35 @@ func (im *InventoryManager) isOpen() bool {
 }
 
 // get all inventory
-func (im *InventoryManager) GetAllInventory() ([]string, bool) {
+func (im *InventoryManager) GetAllInventory(inventory *Inventory) ([]string, bool) {
 	if !im.isOpen() {
 		return "", false
 	}
 
 	// get list length
-	len, err := im.redisClient.LLen(*).Result()
-	if err != nil {
-		return "", false
+	var cursor uint64
+	var n int
+	for {
+	    var keys []string
+	    var err error
+	    keys, cursor, err = client.Scan(cursor, "", 10).Result()
+	    if err != nil {
+	        panic(err)
+	    }
+	    n += len(keys)
+	    if cursor == 0 {
+	        break
+    	}
 	}
 
-	val, err := im.redisClient.Get(*).Result()
-	if err != nil {
-		return "", false
-	}
+	var inventoryList []string
+    for i := 0; i < n; i++ {
+    	inventoryList.append(inventory[i])
+    }
 
-	return val, true
+    return inventoryList, true
 }
+
 
 // get inventory by inventoryId
 func (im *InventoryManager) GetInventory(inventoryId string) (string, bool) {

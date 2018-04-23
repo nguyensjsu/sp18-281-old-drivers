@@ -7,8 +7,8 @@ import (
 	"github.com/go-redis/redis"
 	"github.com/gorilla/mux"
 	"net/url"
-	// "github.com/satori/go.uuid"
-	// "github.com/unrolled/render"
+	"github.com/satori/go.uuid"
+	"github.com/unrolled/render"
 )
 
 func NewClient() {
