@@ -4,45 +4,64 @@
 ---
 ```
 Week 1: (3/24/18-3/31/18) 
-	* Weekly progress: Understanding the final project requirements, analyze and compare different catagories
-			in order to find the best topic that can be used and implemented for this final project. 
-	* Challenge: Have not started on personal project part, so that it is hard to pick a good topic at this moment.
+	* Weekly progress: Understanding the final project requirements, analyze and compare different 
+                       catagories in order to find the best topic that can be used and implemented 
+                       for this final project. 
+
+	* Challenge: Have not started on personal project part, so that it is hard to pick a good 
+                 topic at this moment.
 ``` 
 ```
 Week 2: (4/1/18-4/7/18)
-    * Weekly progress: Team members are still working on individual project part, such as Redis DB installtion and configuration part on EC2 instances.
+    * Weekly progress: Team members are still working on individual project part, such as Redis DB 
+                       installtion and configuration part on EC2 instances.
+
     * Challenge: Testing on AP.
 ```
 ```
 Week3: (4/7/18-4/14/18)
-    * Weekly progress: Discuss on how to combine individual's pieces on team project, and the selection on deployment mode for Redis and network routing.  
-    * Challenge: Combine individual's pieces on team project, and the selection on deployment mode for Redis and network routing.
+    * Weekly progress: Discuss on how to combine individual's pieces on team project, and the 
+                       selection on deployment mode for Redis and network routing.
+
+    * Challenge: Combine individual's pieces on team project, and the selection on deployment mode 
+                 for Redis and network routing.
 ```
 ```
 Week4: (4/14/18-4/21/18)
-    * Weekly progress: Starting working on architecture of team project. We decide to work on coffee order system. You can see more detail on each section in below. 
+    * Weekly progress: Starting working on architecture of team project. We decide to work on coffee 
+                       order system. You can see more detail on each section in below. 
+
     * Challenge: Implementation, Testing part on each API.
 ```
 ```
 Week5: (4/21/18-4/28/18)
-    * Weekly progress: 
-    * Challenge:
+    * Weekly progress: Continues working on implementation part of API in different catagories for 
+                       all team members.
+
+    * Challenge: 
 ```
 ```
 Week6: (4/28/18-5/4/18)
     * Weekly progress: 
+
     * Challenge:
 ```
 
 
 ### 1. Introduction of The Project (04/16/2018)
 ---
-In this project, we decide to create a Starbucks Online Order System. Customers can use this to register, make an online order, check order status, make comments etc. The owner can recevice the order, process it, and also manage the stock, check reviews of each item.
+In this project, we decide to create a Starbucks Online Order System. Customers can use this to 
+register, make an online order, check order status, make comments etc. The owner can recevice 
+the order, process it, and also manage the stock, check reviews of each item.
 
 
 ### 2. Architecture Diagram (04/16/2018)
 ---
-This section our team members discussed the roadmap of our project, figure out the tech stack and architecure of the system. As int the figure below, the frontend will be writen by JS, and we use Kong as API Gateway to route API calls to different sub-module. Each module uses Redis as backend database, and Redis is configured in replication mode, at this time, we have not decided how to handle network partition.
+This section our team members discussed the roadmap of our project, figure out the tech stack and 
+architecure of the system. As int the figure below, the frontend will be writen by JS, and we use 
+Kong as API Gateway to route API calls to different sub-module. Each module uses Redis as backend 
+database, and Redis is configured in replication mode, at this time, we have not decided how to 
+handle network partition.
 
 ### 3. System Design (04/18/2018)
 ---
@@ -56,7 +75,11 @@ In this project we will build an online Starbucks system. This system contains f
 * User management subsystem
 * Product review & comments subsystem
 
-Each module is binded with an API server. Each API server interacts with backend database directly, which is [Redis](https://redis.io/) cluster in this project. For simplicity, we use [Kong](https://getkong.org/about/) as an API gateway to route each call to the related API server. We deploy the backend Redis cluster in replication mode. Each quorum has 5 nodes and each module is related to on quorum. [Heroku](https://dashboard.heroku.com/) is used to deploy the application.
+Each module is binded with an API server. Each API server interacts with backend database directly, 
+which is [Redis](https://redis.io/) cluster in this project. For simplicity, we use [Kong](https://getkong.org/about/) 
+as an API gateway to route each call to the related API server. We deploy the backend Redis cluster 
+in replication mode. Each quorum has 5 nodes and each module is related to on quorum. [Heroku](https://dashboard.heroku.com/) 
+is used to deploy the application.
 
 #### 3.2 UI Design (04/18/2018)
 ---
@@ -134,7 +157,9 @@ Response:
 All orders belone to the user
 ```
 
-The main challenge here is that, for each write operation, we need to update two different data structures, it may casuse data inconsistance if a failure happns during the operation. Here we use transaction provided by Redis to handle the problem.
+The main challenge here is that, for each write operation, we need to update two 
+different data structures, it may casuse data inconsistance if a failure happns 
+during the operation. Here we use transaction provided by Redis to handle the problem.
 
 #### 3.5 Inventory Subsystem (04/18/2018)
 ---
