@@ -217,10 +217,18 @@ Status code 204.
 * Add a new user
 ```
 Method 'POST'
-/user?username=email_address&password=123456&firstname=leo&lastname=Peterson&phone=1234567788
+/user?name=Leo&phone=1234567788&balance=100
 
 Return:
-Status code 200
+Jsonized user struct
+```
+
+* Update user
+```
+Method 'PUT'
+/user/id?balance=150
+Return:
+Jsonized user struct
 ```
 
 * User Authentication
