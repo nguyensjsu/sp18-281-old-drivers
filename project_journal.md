@@ -128,7 +128,7 @@ Jsonized Order struct or 404 error code if not exist
 * Get user orders
 ```
 Method: GET
-/order?userid=xxx
+/orders/{userid}
 
 Response:
 All orders belone to the user

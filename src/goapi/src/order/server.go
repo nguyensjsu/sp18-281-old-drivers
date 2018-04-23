@@ -10,7 +10,7 @@ import (
 )
 
 var redis_server_ip = "127.0.0.1"
-var redis_server_port = 6379
+var redis_server_port int = 6379
 
 type OrderServer struct {
 	om         *OrderManager
@@ -43,7 +43,7 @@ func (os *OrderServer) initRouteTable(mx *mux.Router) {
 	mx.HandleFunc("/order/{orderid}", os.getOrder).Methods("GET")
 	mx.HandleFunc("/order/{orderid}", os.updateOrder).Methods("POST")
 	mx.HandleFunc("/order/{orderid}", os.deleteOrder).Methods("DELETE")
-	mx.HandleFunc("/order", os.getOrderByUser).Methods("GET")
+	mx.HandleFunc("/orders/{userid}", os.getOrderByUser).Methods("GET")
 }
 
 func (os *OrderServer) getOrder(w http.ResponseWriter, req *http.Request) {
@@ -72,7 +72,7 @@ func (os *OrderServer) createOrder(w http.ResponseWriter, req *http.Request) {
 	val, ok := os.om.CreateOrder(userId, items)
 	if !ok {
 		w.WriteHeader(http.StatusBadRequest)
-		w.Write([]byte("Order not exist"))
+		w.Write([]byte("Order create failed"))
 	} else {
 		w.WriteHeader(http.StatusCreated)
 		w.Write([]byte(val))
@@ -138,7 +138,8 @@ func (os *OrderServer) deleteOrder(w http.ResponseWriter, req *http.Request) {
 }
 
 func (os *OrderServer) getOrderByUser(w http.ResponseWriter, req *http.Request) {
-	userId := req.FormValue("userid")
+	params := mux.Vars(req)
+	userId := params["userid"]
 	if len(userId) == 0 {
 		w.WriteHeader(http.StatusBadRequest)
 		w.Write([]byte("Invalid Parameter"))
