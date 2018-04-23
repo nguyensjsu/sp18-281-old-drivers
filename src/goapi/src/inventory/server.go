@@ -51,31 +51,42 @@ func (is *InventoryServer) initRoutesTable(mx *mux.Router) {
 
 // API Get All Inventorys
 func (is *InventoryServer) getInventorysHandler(w http.ResponseWriter, r *http.Request) {
+	// not working!
+	val, ok := is.im.GetAllInventory()
+
+	if !ok {
+		w.WriteHeader(http.StatusNotFound)
+		w.Write([]byte("Inventory not exist"))
+	} else {
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte(val))
+	}
+
+	log.Printf("GET Inventory %v\n", ok)
 
 }
 
 // API Get Inventory
 func (is *InventoryServer) getInventoryHandler(w http.ResponseWriter, r *http.Request) {
-	r, err := url.ParseForm(r)
-	if err != nil {
-		panic(err)
+	param := mux.Var(r)
+	inventoryId := param["inventoryId"]
+	val, ok := is.im.GetInventory(inventoryId)
+
+	if !ok {
+		w.WriteHeader(http.StatusNotFound)
+		w.Write([]byte("Inventory not exist"))
+	} else {
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte(val))
 	}
-	if len(r.Form["id"] > 0) {
-		formatter.JSON(w, http.StatusOK, client.HScan(cursor, r.FormValue["id"], ))
-	}
+
+	log.Printf("GET Inventory %v\n", ok)
 
 }
 
 // API Add Inventory
 func (is *InventoryServer) addInventoryHandler(w http.ResponseWriter, r *http.Request) {
-	r, err := url.ParseForm(r)
-	if err != nil {
-		panic(err)
-	}
-
-	uuid := uuid.NewV4()
-	client.HMset(uuid, inventoryId r.FormValue)
-
+	
 }
 
 // API Update Inventory
@@ -86,6 +97,19 @@ func (is *InventoryServer) updateInventoryHandler(w http.ResponseWriter, r *http
 
 // API Delete Inventory
 func (is *InventoryServer) deleteInventoryHandler(w http.ResponseWriter, r *http.Request) {
-		
+	
+	param := mux.Var(r)
+	inventoryId := param["inventoryId"]
+	val, ok := is.im.DeleteInventory(inventoryId)
+
+	if !ok {
+		w.WriteHeader(http.StatusNotFound)
+		w.Write([]byte("Inventory not exist"))
+	} else {
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte(val))
+	}
+
+	log.Printf("DELETE Inventory %v\n", ok)	
 	
 }

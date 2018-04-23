@@ -53,7 +53,7 @@ func (im *InventoryManager) GetAllInventory(inventory *Inventory) ([]string, boo
 	for {
 	    var keys []string
 	    var err error
-	    keys, cursor, err = client.Scan(cursor, "", 10).Result()
+	    keys, cursor, err = im.redisClient.Scan(cursor, "", 10).Result()
 	    if err != nil {
 	        panic(err)
 	    }
@@ -61,7 +61,8 @@ func (im *InventoryManager) GetAllInventory(inventory *Inventory) ([]string, boo
 	    if cursor == 0 {
 	        break
     	}
-	}
+	} // n represents the total of keys
+
 
 	var inventoryList []string
     for i := 0; i < n; i++ {
