@@ -41,7 +41,7 @@ func (is *InventoryServer) Run() {
 
 // API Routes
 func (is *InventoryServer) initRoutesTable(mx *mux.Router) {
-	mx.HandleFunc("/inventorys", is.getInventorysHandler()).Methods("GET")
+	mx.HandleFunc("/inventorys", is.getAllInventoryHandler()).Methods("GET")
 	mx.HandleFunc("/inventory/{id}", is.getInventoryHandler()).Methods("GET")
 	mx.HandleFunc("/inventory", is.addInventoryHandler()).Methods("POST")
 	mx.HandleFunc("/inventory/{id}", is.updateInventoryHandler()).Methods("PUT")
@@ -50,16 +50,19 @@ func (is *InventoryServer) initRoutesTable(mx *mux.Router) {
 
 
 // API Get All Inventorys
-func (is *InventoryServer) getInventorysHandler(w http.ResponseWriter, r *http.Request) {
+func (is *InventoryServer) getAllInventoryHandler(w http.ResponseWriter, r *http.Request) {
 	
-	val, ok := is.im.GetAllInventory()
+	var inventory Inventory
+	inventoryJson, ok := is.im.GetAllInventory()
+
+	json.Unmarshal([]byte(inventoryJson), &inventory)
 
 	if !ok {
 		w.WriteHeader(http.StatusNotFound)
 		w.Write([]byte("Inventory not exist"))
 	} else {
 		w.WriteHeader(http.StatusOK)
-		w.Write([]byte(val))
+		w.Write([]byte(inventory))
 	}
 
 	log.Printf("GET All Inventory %v\n", ok)
