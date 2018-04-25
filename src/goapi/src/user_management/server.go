@@ -6,7 +6,6 @@ import (
 	"github.com/gorilla/mux"
 	"log"
 	"net/http"
-	"strings"
 	"os"
 	"strconv"
 )
@@ -115,6 +114,7 @@ func (us *UserServer) updateUser(w http.ResponseWriter, req *http.Request) {
 	log.Printf("UPDATE User %v\n", ok)
 }
 
+// delete user
 func (us *UserServer) deleteUser(w http.ResponseWriter, req *http.Request) {
 	params := mux.Vars(req)
 	userId := params["userid"]
@@ -127,25 +127,4 @@ func (us *UserServer) deleteUser(w http.ResponseWriter, req *http.Request) {
 		w.Write([]byte("Delete user Successfully"))
 	}
 	log.Printf("DELETE user %v\n", ok)
-}
-
-func (us *UserServer) getUserByUser(w http.ResponseWriter, req *http.Request) {
-	params := mux.Vars(req)
-	userId := params["userid"]
-	if len(userId) == 0 {
-		w.WriteHeader(http.StatusBadRequest)
-		w.Write([]byte("Invalid Parameter"))
-		return
-	}
-
-	orders, ok := os.om.GetOrderByUser(userId)
-	if !ok {
-		w.WriteHeader(http.StatusBadRequest)
-		w.Write([]byte("Get order by user failed"))
-	} else {
-		buf, _ := json.Marshal(orders)
-		w.WriteHeader(http.StatusOK)
-		w.Write(buf)
-	}
-	log.Printf("GET_ORDER_BY_USER Order %v\n", ok)
 }
