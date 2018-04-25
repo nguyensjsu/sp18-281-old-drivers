@@ -223,6 +223,15 @@ Return:
 Jsonized user struct
 ```
 
+* Get user
+```
+Method 'GET'
+/user/{id}
+
+Return:
+Jsonized user struct
+```
+
 * Update user
 ```
 Method 'PUT'
