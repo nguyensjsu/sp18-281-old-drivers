@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"strings"
 	"os"
+	"strconv"
 )
 
 var redis_server_ip = "127.0.0.1"
@@ -46,6 +47,7 @@ func (us *UserServer) initRouteTable(mx *mux.Router) {
 	mx.HandleFunc("/user/{userid}", us.deleteUser).Methods("DELETE")
 }
 
+// get user
 func (us *UserServer) getUser(w http.ResponseWriter, req *http.Request) {
 	params := mux.Vars(req)
 	userId := params["userid"]
@@ -60,84 +62,74 @@ func (us *UserServer) getUser(w http.ResponseWriter, req *http.Request) {
 	log.Printf("GET User %v\n", ok)
 }
 
+// create user
 func (us *UserServer) createUser(w http.ResponseWriter, req *http.Request) {
-	userId := req.FormValue("userid")
-	if len(userId) == 0 {
-		w.WriteHeader(http.StatusBadRequest)
-		w.Write([]byte("Invalid parameter"))
-		return
-	}
-
-	/*items := strings.Split(req.FormValue("items"), ",")
-	val, ok := os.om.CreateOrder(userId, items)
+	name := req.FormValue("name")
+	phone := req.FormValue("phone")
+	balance := req.FormValue("balance")
+	val, ok := us.um.CreateUser(name, phone, balance)
 	if !ok {
 		w.WriteHeader(http.StatusBadRequest)
 		w.Write([]byte("Order create failed"))
 	} else {
 		w.WriteHeader(http.StatusCreated)
 		w.Write([]byte(val))
-	}*/
+	}
 	log.Printf("CREATE User %v\n", ok)
 }
 
+// update user
 func (us *UserServer) updateUser(w http.ResponseWriter, req *http.Request) {
 	params := mux.Vars(req)
 	userId := params["userid"]
-	//var user User
 	userJson, ok := us.um.GetUser(userId)
 	if !ok {
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
-
+	var user User
 	json.Unmarshal([]byte(userJson), &user)
-	addItems := strings.Split(req.FormValue("add"), ",")
-	delItems := strings.Split(req.FormValue("delete"), ",")
-
-	items := make(map[string]string)
-	for _, item := range order.Items {
-		items[item] = item
+	phone := req.FormValue("phone")
+	balance := req.FormValue("balance")
+	if len(phone) != 0 {
+		user.Phone = phone
+	}
+	if len(balance) != 0 {
+		bal, err := strconv.Atoi(balance)
+		if err != nil {
+			w.WriteHeader(http.StatusBadRequest)
+			return
+		}
+		user.Balance = bal
 	}
 
-	for _, del := range delItems {
-		delete(items, del)
-	}
-
-	for _, add := range addItems {
-		items[add] = add
-	}
-
-	order.Items = order.Items[:0]
-	for k, _ := range items {
-		order.Items = append(order.Items, k)
-	}
-	ok = os.om.UpdateOrder(&order)
+	ok = us.um.UpdateUser(&user)
 	if !ok {
 		w.WriteHeader(http.StatusBadRequest)
-		w.Write([]byte("Update order failed"))
+		w.Write([]byte("Update user failed"))
 	} else {
-		buf, _ := json.Marshal(order)
+		buf, _ := json.Marshal(user)
 		w.WriteHeader(http.StatusOK)
 		w.Write(buf)
 	}
-	log.Printf("UPDATE Order %v\n", ok)
+	log.Printf("UPDATE User %v\n", ok)
 }
 
-func (os *OrderServer) deleteOrder(w http.ResponseWriter, req *http.Request) {
+func (us *UserServer) deleteUser(w http.ResponseWriter, req *http.Request) {
 	params := mux.Vars(req)
-	orderId := params["orderid"]
-	ok := os.om.DeleteOrder(orderId)
+	userId := params["userid"]
+	ok := us.um.DeleteUser(userId)
 	if !ok {
 		w.WriteHeader(http.StatusBadRequest)
-		w.Write([]byte("Delete order failed"))
+		w.Write([]byte("Delete user failed"))
 	} else {
 		w.WriteHeader(http.StatusNoContent)
-		w.Write([]byte("Delete order Successfully"))
+		w.Write([]byte("Delete user Successfully"))
 	}
-	log.Printf("DELETE Order %v\n", ok)
+	log.Printf("DELETE user %v\n", ok)
 }
 
-func (os *OrderServer) getOrderByUser(w http.ResponseWriter, req *http.Request) {
+func (us *UserServer) getUserByUser(w http.ResponseWriter, req *http.Request) {
 	params := mux.Vars(req)
 	userId := params["userid"]
 	if len(userId) == 0 {
