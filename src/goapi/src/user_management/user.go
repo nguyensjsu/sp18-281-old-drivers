@@ -7,9 +7,6 @@ import (
 	"strconv"
 )
 
-var redis_server_ip = "127.0.0.1"
-var redis_server_port = 6379
-
 type UserManager struct {
 	redisClient *redis.Client
 }
