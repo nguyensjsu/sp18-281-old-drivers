@@ -241,10 +241,6 @@ Return:
 Jsonized user struct
 ```
 
-* User Authentication
-```
-```
-
 * Delete user information
 ```
 Method 'DELETE'
