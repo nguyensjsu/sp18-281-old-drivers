@@ -68,7 +68,7 @@ func (us *UserServer) createUser(w http.ResponseWriter, req *http.Request) {
 	val, ok := us.um.CreateUser(name, phone, balance)
 	if !ok {
 		w.WriteHeader(http.StatusBadRequest)
-		w.Write([]byte("Order create failed"))
+		w.Write([]byte("User create failed"))
 	} else {
 		w.WriteHeader(http.StatusCreated)
 		w.Write([]byte(val))

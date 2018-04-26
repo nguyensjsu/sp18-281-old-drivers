@@ -244,7 +244,7 @@ Jsonized user struct
 * Delete user information
 ```
 Method 'DELETE'
-/user/{userid}
+/user/{id}
 
 Return:
 Status code 204.

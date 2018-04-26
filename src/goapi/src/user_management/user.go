@@ -5,6 +5,7 @@ import (
 	"github.com/go-redis/redis"
 	"github.com/satori/go.uuid"
 	"strconv"
+	"log"
 )
 
 type UserManager struct {
@@ -19,7 +20,7 @@ type User struct {
 }
 
 func NewUserManager(ipAddr string, port int) *UserManager {
-	addr := ipAddr + ":" + string(port)
+	addr := ipAddr + ":" + strconv.Itoa(port)
 	client := redis.NewClient(&redis.Options{
 		Addr: addr})
 
@@ -65,7 +66,7 @@ func (um *UserManager) DeleteUser(userId string) bool {
 	if !um.isOpen() {
 		return false
 	}
-	err := um.redisClient.Del(userId)
+	err := um.redisClient.Del(userId).Err()
 	if err != nil {
 		return false
 	}
@@ -75,10 +76,12 @@ func (um *UserManager) DeleteUser(userId string) bool {
 // create User
 func (um *UserManager) CreateUser(username string, phone string, balance string) (string, bool){
 	if !um.isOpen() {
+		log.Printf("user isOpen false %v\n")
 		return "", false
 	}
 	bal, err := strconv.Atoi(balance)
 	if err != nil {
+		log.Printf("user string false %v\n")
 		return "", false
 	}
 	uuid, _ := uuid.NewV4()
@@ -89,11 +92,13 @@ func (um *UserManager) CreateUser(username string, phone string, balance string)
 		Balance: bal}
 	buf, err := json.Marshal(user)
 	if err != nil {
+		log.Printf("user marshal false %v\n")
 		return "", false
 	}
 	val := string(buf[:])
 	err = um.redisClient.Set(user.UserId, val,0).Err()
 	if err != nil {
+		log.Printf("Set failed %v\n", err)
 		return "", false
 	}
 	return val, true
