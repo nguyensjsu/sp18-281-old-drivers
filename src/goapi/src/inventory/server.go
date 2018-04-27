@@ -2,13 +2,11 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
 	"net/http"
-	"github.com/go-redis/redis"
 	"github.com/gorilla/mux"
-	"net/url"
-	"github.com/satori/go.uuid"
-	"github.com/unrolled/render"
+	"github.com/codegangsta/negroni"
+	"log"
+	"strconv"
 )
 
 var redis_server_ip = "127.0.0.1"
@@ -22,10 +20,10 @@ type InventoryServer struct {
 func NewServer() *InventoryServer {
 	n := negroni.Classic()
 	inventoryServer := &InventoryServer{
-		im:         InventoryManager(redis_server_ip, redis_server_port),
+		im:         NewInventoryManager(redis_server_ip, redis_server_port),
 		httpServer: n}
 	log.Println("Create InventoryServer")
-	return orderServer
+	return inventoryServer
 }
 
 func (is *InventoryServer) Init() {
@@ -40,22 +38,23 @@ func (is *InventoryServer) Run() {
 }
 
 // API Routes
-func (is *InventoryServer) initRoutesTable(mx *mux.Router) {
-	mx.HandleFunc("/inventorys", is.getAllInventoryHandler()).Methods("GET")
-	mx.HandleFunc("/inventory/{id}", is.getInventoryHandler()).Methods("GET")
-	mx.HandleFunc("/inventory", is.addInventoryHandler()).Methods("POST")
-	mx.HandleFunc("/inventory/{id}", is.updateInventoryHandler()).Methods("PUT")
-	mx.HandleFunc("/inventory/{id}", is.gumballNewOrderHandler()).Methods("DELETE")
+func (is *InventoryServer) initRouteTable(mx *mux.Router) {
+	// mx.HandleFunc("/inventorys", is.getAllInventoryHandler).Methods("GET")
+	mx.HandleFunc("/inventory/{inventoryid}", is.getInventoryHandler).Methods("GET")
+	mx.HandleFunc("/inventory", is.addInventoryHandler).Methods("POST")
+	mx.HandleFunc("/inventory/{inventoryid}", is.updateInventoryHandler).Methods("PUT")
+	mx.HandleFunc("/inventory/{inventoryid}", is.deleteInventoryHandler).Methods("DELETE")
 }
 
 
-// API Get All Inventorys
+/* API Get All Inventorys
 func (is *InventoryServer) getAllInventoryHandler(w http.ResponseWriter, r *http.Request) {
 	
 	var inventory Inventory
 	inventoryJson, ok := is.im.GetAllInventory()
 
-	json.Unmarshal([]byte(inventoryJson), &inventory)
+	var objmap map[string]*json.RawMessage
+	json.Unmarshal(inventoryJson, &objmap)
 
 	if !ok {
 		w.WriteHeader(http.StatusNotFound)
@@ -68,11 +67,12 @@ func (is *InventoryServer) getAllInventoryHandler(w http.ResponseWriter, r *http
 	log.Printf("GET All Inventory %v\n", ok)
 
 }
+*/
 
 // API Get Inventory
 func (is *InventoryServer) getInventoryHandler(w http.ResponseWriter, r *http.Request) {
-	param := mux.Var(r)
-	inventoryId := param["inventoryId"]
+	param := mux.Vars(r)
+	inventoryId := param["inventoryid"]
 	val, ok := is.im.GetInventory(inventoryId)
 
 	if !ok {
@@ -91,22 +91,22 @@ func (is *InventoryServer) getInventoryHandler(w http.ResponseWriter, r *http.Re
 func (is *InventoryServer) addInventoryHandler(w http.ResponseWriter, r *http.Request) {
 	
 	name := r.FormValue("name")
-	price := float32(r.FormValue("price"))
-	amount := uint32(r.FormValue("amount"))
+	price, err1 := strconv.ParseFloat(r.FormValue("price"), 64)
+	amount, err2 := strconv.ParseInt(r.FormValue("amount"), 10, 64)
 
-	if inventoryName == nil || inventoryPrice == nil || amount == nil {
+
+	if name == "" || err1 != nil || err2 != nil {
 		w.WriteHeader(http.StatusBadRequest)
-		w.WriteHeader("Invalid parameters")
+		w.Write([]byte("Invalid parameters"))
 	}
 	
-	val, ok := is.im.CreateInventory(name, price, amount)
+	_, ok := is.im.CreateInventory(name, price, amount)
 	if !ok {
 		w.WriteHeader(http.StatusBadRequest)
-		w.WriteHeader("Inventory create failed")
-	}
-	else {
+		w.Write([]byte("Inventory create failed"))
+	} else {
 		w.WriteHeader(http.StatusCreated)
-		w.WriteHeader("Inventory created!")
+		w.Write([]byte("Inventory created!"))
 	}
 }
 
@@ -114,49 +114,48 @@ func (is *InventoryServer) addInventoryHandler(w http.ResponseWriter, r *http.Re
 // API Update Inventory
 func (is *InventoryServer) updateInventoryHandler(w http.ResponseWriter, r *http.Request) {
 	
-	param := mux.Var(r)
-	inventoryId := param["inventoryId"]
+	param := mux.Vars(r)
+	inventoryId := param["inventoryid"]
 
 	var inventory Inventory
-	inventoryJson, ok := is.io.GetInventory(inventoryId)
+	inventoryJson, ok := is.im.GetInventory(inventoryId)
 	if !ok {
 		w.WriteHeader(http.StatusNotFound)
-		w.WriteHeader("Inventory Id doesn't exist")
+		w.Write([]byte("Inventory Id doesn't exist"))
 	}
 
 	json.Unmarshal([]byte(inventoryJson), &inventory)
 	// to be continue...
-	name := r.FormValue["name"]
-	price := r.FormValue["price"]
-	amount := r.FormValue["amount"]
+	name := r.FormValue("name")
+	price := r.FormValue("price")
+	amount := r.FormValue("amount")
 	inventory.InventoryName = name
-	inventory.InventoryPrice = price
-	inventory.Amount = amount
+	inventory.InventoryPrice, _ = strconv.ParseFloat(price, 64)
+	inventory.Amount, _ = strconv.ParseInt(amount, 10, 64)
 
-	val, ok := is.im.UpdateInventory(inventory)
-	if !ok {
+	good := is.im.UpdateInventory(&inventory)
+	if !good {
 		w.WriteHeader(http.StatusBadRequest)
-		w.WriteHeader("Update inventory failed")
-	}
-	else {
+		w.Write([]byte("Update inventory failed"))
+	} else {
 		w.WriteHeader(http.StatusOK)
-		w.WriteHeader("Inventory updated!")
+		w.Write([]byte("Inventory updated!"))
 	}
 }
 
 // API Delete Inventory
 func (is *InventoryServer) deleteInventoryHandler(w http.ResponseWriter, r *http.Request) {
 	
-	param := mux.Var(r)
-	inventoryId := param["inventoryId"]
-	val, ok := is.im.DeleteInventory(inventoryId)
+	param := mux.Vars(r)
+	inventoryId := param["inventoryid"]
+	ok := is.im.DeleteInventory(inventoryId)
 
 	if !ok {
 		w.WriteHeader(http.StatusNotFound)
 		w.Write([]byte("Inventory not exist"))
 	} else {
 		w.WriteHeader(http.StatusOK)
-		w.Write([]byte(val))
+		w.Write([]byte("Inventory delete successful"))
 	}
 
 	log.Printf("DELETE Inventory %v\n", ok)	

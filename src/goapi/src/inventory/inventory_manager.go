@@ -2,35 +2,36 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
-	"net/http"
+	// "fmt"
+	// "net/http"
 	"github.com/go-redis/redis"
-	"github.com/urfave/negroni"
-	"github.com/gorilla/mux"
-	"net/url"
+	// "github.com/codegangsta/negroni"
+	// "github.com/gorilla/mux"
+	// "net/url"
 	"github.com/satori/go.uuid"
-	"github.com/unrolled/render"
+	// "github.com/unrolled/render"
 	"strconv"
+	"log"
 )
 
 
 type InventoryManager struct {
-	redisClient *Client
+	redisClient *redis.Client
 }
 
 type Inventory struct {
 	InventoryId		string
 	InventoryName	string
-	InventoryPrice	float32
-	Amount  		uint32
+	InventoryPrice	float64
+	Amount  		int64
 	Reviews			[]string
 }
 
 // redis sentinel for automatic failover
-func NewInventoryManager(master string, sentinels []string) *InventoryManager {
-	client := redis.NewFailoverClient(&redis.FailoverOption{
-		MasterName:    master,
-		SentinelAddrs: sentinels})
+func NewInventoryManager(ipAddr string, port int) *InventoryManager {
+	addr := ipAddr + ":" + string(port)
+	client := redis.NewClient(&redis.Options{
+		Addr : addr})
 
 	im := &InventoryManager{
 		redisClient: client}
@@ -45,7 +46,7 @@ func (im *InventoryManager) isOpen() bool {
 // get all inventory
 func (im *InventoryManager) GetAllInventory() (map[string]string, bool) {
 	if !im.isOpen() {
-		return "", false
+		return nil, false
 	}
 
 	// get list length
@@ -66,12 +67,12 @@ func (im *InventoryManager) GetAllInventory() (map[string]string, bool) {
 
 
 	// create map store all the key-value pair
-	var inventoryMap map[string]string
+	inventoryMap := make(map[string]string)
     for i := 0; i < n; i++ {
 
-    	iid, _ := im.redisClient.MGET("key" + strconv.Itoa(i))
-    	val, _ := im.redisClient.GET(iid)
-    	inventoryMap[iid] = val
+    	keyv, _ := im.redisClient.Get("key" + strconv.Itoa(i)).Result()
+    	kvalue, _ := im.redisClient.Get(keyv).Result()
+    	inventoryMap[keyv] = kvalue
 
     }
 
@@ -94,33 +95,37 @@ func (im *InventoryManager) GetInventory(inventoryId string) (string, bool) {
 }
 
 // create new inventory
-func (im *InventoryManager) CreateInventory(name string, price float32, amount uint32) (string, bool) {
+func (im *InventoryManager) CreateInventory(name string, price float64, amount int64) (string, bool) {
 	if !im.isOpen() {
 		return "", false
 	}
 
 	uuid, _ := uuid.NewV4()
 	inventory := &Inventory {
-		InventoryId:	uuid.string(),
+		InventoryId:	uuid.String(),
 		InventoryName:	name,
 		InventoryPrice: price,
-		Amount:			amount
-	}
+		Amount:			amount}
 
 	buf, err := json.Marshal(inventory)
 	if err != nil {
+		log.Printf("inventory marshal failed %v\n")
 		return "", false
 	}
 
 	val := string(buf[:])
 
-	result, err := im.redisClient.Set(inventory.InventoryId, val, 0)
 
+	err = im.redisClient.Set(inventory.InventoryId, val, 0).Err()
+
+	
 	if err != nil {
+		log.Printf("inventroy set failed")
 		return "", false
 	}
+	
 
-	return result, true
+	return val, true
 		
 }
 
@@ -136,11 +141,13 @@ func (im *InventoryManager) UpdateInventory(inventory *Inventory) bool {
 	}
 
 	val := string(buf[:])
-	result, err := im.redisClient.Set(inventory.InventoryId, val, 0)
+	im.redisClient.Set(inventory.InventoryId, val, 0)
 
+	/*
 	if err != nil {
 		return false		
 	}
+	*/
 
 	return true
 }
