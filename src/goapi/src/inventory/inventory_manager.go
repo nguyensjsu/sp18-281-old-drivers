@@ -29,7 +29,7 @@ type Inventory struct {
 
 // redis sentinel for automatic failover
 func NewInventoryManager(ipAddr string, port int) *InventoryManager {
-	addr := ipAddr + ":" + string(port)
+	addr := ipAddr + ":" + strconv.Itoa(port)
 	client := redis.NewClient(&redis.Options{
 		Addr : addr})
 
@@ -158,9 +158,10 @@ func (im *InventoryManager) DeleteInventory(inventoryId string) bool {
 		return false
 	}
 
-	err := im.redisClient.Del(inventoryId)
+	err := im.redisClient.Del(inventoryId).Err()
 
 	if err != nil {
+		log.Printf("delete failed")
 		return false
 	}
 

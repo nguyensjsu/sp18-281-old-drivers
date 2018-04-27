@@ -70,6 +70,7 @@ func (is *InventoryServer) getAllInventoryHandler(w http.ResponseWriter, r *http
 */
 
 // API Get Inventory
+// curl -i -X GET "localhost:8080/inventory/{inventoryid}"
 func (is *InventoryServer) getInventoryHandler(w http.ResponseWriter, r *http.Request) {
 	param := mux.Vars(r)
 	inventoryId := param["inventoryid"]
@@ -88,6 +89,7 @@ func (is *InventoryServer) getInventoryHandler(w http.ResponseWriter, r *http.Re
 }
 
 // API Add Inventory
+// curl -i -X POST "localhost:8080/inventory?name=latin&price=20&amount=100"
 func (is *InventoryServer) addInventoryHandler(w http.ResponseWriter, r *http.Request) {
 	
 	name := r.FormValue("name")
@@ -100,18 +102,19 @@ func (is *InventoryServer) addInventoryHandler(w http.ResponseWriter, r *http.Re
 		w.Write([]byte("Invalid parameters"))
 	}
 	
-	_, ok := is.im.CreateInventory(name, price, amount)
+	val, ok := is.im.CreateInventory(name, price, amount)
 	if !ok {
 		w.WriteHeader(http.StatusBadRequest)
 		w.Write([]byte("Inventory create failed"))
 	} else {
 		w.WriteHeader(http.StatusCreated)
-		w.Write([]byte("Inventory created!"))
+		w.Write([]byte(val))
 	}
 }
 
 
 // API Update Inventory
+// curl -i -X PUT "localhost:8080/inventory/7fc439c2-8dd0-4829-bb3c-64f88f03fc86?name=latin&price=20&amount=99"
 func (is *InventoryServer) updateInventoryHandler(w http.ResponseWriter, r *http.Request) {
 	
 	param := mux.Vars(r)
@@ -144,6 +147,7 @@ func (is *InventoryServer) updateInventoryHandler(w http.ResponseWriter, r *http
 }
 
 // API Delete Inventory
+// curl -i -X DELETE "localhost:8080/inventory/dad0c14f-e0ae-4fa3-9a8c-29b9dad9347e"
 func (is *InventoryServer) deleteInventoryHandler(w http.ResponseWriter, r *http.Request) {
 	
 	param := mux.Vars(r)
