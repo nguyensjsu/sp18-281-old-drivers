@@ -37,6 +37,7 @@ Week4: (4/14/18-4/21/18)
 Week5: (4/21/18-4/28/18)
     * Weekly progress: Continues working on implementation part of API in different catagories for 
                        all team members.
+                       Kong configuration on AWS
 
     * Challenge: 
 ```
@@ -259,8 +260,29 @@ Status code 204.
 ### 4. System APIs (04/19/2018)
 ---
 
-### 5. Kong Configuration (04/19/2018)
+### 5. Kong Configuration (04/26/2018)
 ---
+In this project, we use [Kong](https://getkong.org/about/) as our API gateway to route our API to different API servers.
+We adopt Kong + PostgresSQL mode. PostgresSQL is deployed from DockerCloud, and Kong is deployed on AWS EC2 instance. In
+Kong, we need to change few configs to make it talk to backend DB.
+```
+admin_listen = 0.0.0.0:8001, 0.0.0.0:8444 ssl  # Open to all foreign connections
+pg_host = <ec2 public IP>             # The PostgreSQL host to connect to.
+pg_port = 5432                        # The port to connect to.
+pg_user = kong                        # The username to authenticate if required.
+pg_password = xxx                     # The password to authenticate if required.
+pg_database = kong                    # The database name to connect to.
+``` 
+
+For PostgresSQL, we need to setup Kong user and database
+```
+CREATE USER kong; CREATE DATABASE kong OWNER kong;
+```
+
+```
+kong migrations up [-c /path/to/kong.conf]
+kong start [-c /path/to/kong.conf]
+```
 
 ### 6. Redis Configuration (04/19/2018)
 ---
