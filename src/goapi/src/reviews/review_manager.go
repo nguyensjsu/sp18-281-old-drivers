@@ -19,7 +19,6 @@ type Review struct {
 	Item    string
 	Content string
 	Date    string
-
 }
 
 func NewReviewManager(ipAddr string, port int) *ReviewManager {

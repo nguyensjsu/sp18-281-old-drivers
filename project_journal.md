@@ -36,8 +36,8 @@ Week4: (4/14/18-4/21/18)
 ```
 Week5: (4/21/18-4/28/18)
     * Weekly progress: Continues working on implementation part of API in different catagories for 
-                       all team members.
-                       Kong configuration on AWS
+                       all team members, and testing done for API parts for all team members.
+                       Finish Kong configuration on AWS.
 
     * Challenge: 
 ```
@@ -253,6 +253,67 @@ Status code 204.
 
 #### 3.7 Product Review & Comments Subsystem (04/18/2018)
 ---
+* Data Structure   
+```
+type Review struct {
+  ReviewId string
+  UserId  string
+  Item    string
+  Content string
+  Date    string
+}
+```
+
+* Add a review
+```
+Method 'POST'
+
+/review
+
+Return:
+Jsonized review struct
+```
+
+* Get review
+```
+Method 'GET'
+
+/review/{reviewid}
+
+Return:
+Jsonized review struct
+```
+
+* Update review
+```
+Method 'POST'
+
+/review/{reviewid}
+
+Jsonized review struct
+```
+
+* Delete review
+```
+Method 'DELETE'
+
+/review/{reviewid}
+
+
+Return:
+Status code 204.
+```
+
+* Get review by user
+```
+Method 'GET'
+
+/review
+
+Response:
+All reviews belong to the user
+```
+
 
 #### 3.8 Error Handling (04/18/2018)
 ---
