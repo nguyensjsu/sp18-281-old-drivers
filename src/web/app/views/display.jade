@@ -1,0 +1,141 @@
+doctype html
+html(lang='en')
+  head
+    meta(charset='UTF-8')
+    meta(name='viewport', content='width=device-width, initial-scale=1, shrink-to-fit=no')
+    meta(name='description', content='')
+    meta(name='author', content='')
+    link(rel='icon', href='../../favicon.ico')
+    title Tour Guide for Spartans
+    // Bootstrap core CSS
+    link(rel='stylesheet', href='https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css', integrity='sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ', crossorigin='anonymous')
+    // jQuery ui CSS
+    link(rel='stylesheet', href='//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css')
+    script(src='https://code.jquery.com/jquery-1.12.4.js')
+    script(src='https://code.jquery.com/ui/1.12.1/jquery-ui.js')
+    script(src='https://use.fontawesome.com/f9b22d3044.js')
+    // Custom CSS
+    link(href='stylesheets/style-display.css', rel='stylesheet')
+    // Autocomplete funciton
+  body
+    nav.navbar.navbar-toggleable-md.navbar-light.fixed-top.bg-faded
+      button.navbar-toggler.navbar-toggler-right(type='button', data-toggle='collapse', data-target='#navbarCollapse', aria-controls='navbarCollapse', aria-expanded='false', aria-label='Toggle navigation')
+        span.navbar-toggler-icon
+      a.navbar-brand(href='#')
+        img.img-fluid(src='images/qIXtA.png', height='30px', width='30px')
+      #navbarCollapse.collapse.navbar-collapse
+        ul.navbar-nav.mr-auto
+          li.nav-item.active
+            a.nav-link(href='/') Home
+          li.nav-item
+            a.nav-link(href='#') About
+          li.nav-item
+            a.nav-link(href='#') Contact
+        form.form-inline.mt-2.mt-md-0
+          .ui-widget
+            input#tags.form-control.mr-sm-2(type='text', placeholder='Search')
+            button.btn.btn-outline-success.my-2.my-sm-0(type='submit') Search
+        ul.navbar-nav.justify-content-end
+          li.nav-item
+            if user
+              a.nav-link(href='/home') Hello, #{user.firstName}!
+            else
+              a.nav-link(href='/login') Join Us
+    .container-fluid
+      .row
+        h2 Golden Gate Bridge
+      .row(height='300px')
+        .col-6
+          h4 Location
+          br
+          p
+            i.fa.fa-map-marker(aria-hidden='true')
+            |                     Lincoln Boulevard, near Doyle Drive and Fort Point,
+            |                     San Francisco, CA 94129
+            br
+            br
+          h4 Contact
+          br
+          i.fa.fa-external-link(aria-hidden='true')
+          a(href='http://www.goldengatebridge.org/') Website
+          br
+          i.fa.fa-phone(aria-hidden='true')
+          |                 +1 415-921-5858
+          br
+          br
+          br
+          br
+          br
+          br
+          br
+          p
+        .col-6
+          //
+            <iframe
+            width="100%"
+            height="100%"
+            frameborder="0"
+            src="https://www.google.com/maps/embed/v1/place?key=AIzaSyBhbImaMErB_FzIzVlrlfbdXfOfmo1uPYc
+            &q=golden gate bridge" zoom="5" allowfullscreen>
+            </iframe>
+          #map
+          script.
+            var map;
+            function initMap() {
+            map = new google.maps.Map(document.getElementById('map'), {
+            center: {lat: 37.819929, lng: -122.478255},
+            zoom: 12
+            });
+            }
+          script(src='https://maps.googleapis.com/maps/api/js?key=AIzaSyD24HTaCZNl759ZbQduQKfitIi2hOCAULw&callback=initMap', async='', defer='')
+    hr
+    .container-fluid
+      .row
+        .insert.col-4
+          h3 Insert Review
+          form(action='/insert', method='post')
+            .form-group.input
+              label(for='exampleInputName1') Name
+              input#exampleInputName1.form-control(type='text', name='name')
+            .form-group.input
+              label(for='formControlContent1') Content
+              textarea#formControlContent1.form-control(rows='3', name='content')
+            button(type='submit') INSERT
+        .update.col-4
+          h3 Update Review
+          form(action='/update', method='post')
+            .input.form-group
+              label(for='exampleInputId1') ID
+              input#exampleInputId1.form-control(type='text', name='id')
+            .input.form-group
+              label(for='exampleInputName') Name
+              input#exampleInputName.form-control(type='text', name='name')
+            .input.form-group
+              label(for='formControlContent') Content
+              textarea#formControlContent.form-control(rows='3', name='content')
+            button(type='submit') UPDATE
+        .delete.col-4
+          h3 Delete Review
+          form(action='/delete', method='post' enctype="application/x-www-form-urlencoded")
+            .input.form-group
+              label(for='exampleInputId') ID
+              input#exampleInputId.form-control(type='text', name='id')
+            button(type='submit') DELETE
+      hr
+      .row
+        .col-12.get
+          h3 Reviews
+          div
+            each item in items              
+                .item
+                  li.list-group.item ID: #{item.id}
+                  li.list-group.item User: #{item.name}
+                  li.list-group.item #{item.content}
+
+
+    // Bootstrap JavaScript
+    script(src='https://code.jquery.com/jquery-3.1.1.slim.min.js', integrity='sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n', crossorigin='anonymous')
+    script(src='https://code.jquery.com/jquery-3.2.1.js', integrity='sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE=', crossorigin='anonymous')
+    script(src='https://code.jquery.com/ui/1.12.1/jquery-ui.js')
+    script(src='https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js', integrity='sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb', crossorigin='anonymous')
+    script(src='https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js', integrity='sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn', crossorigin='anonymous')

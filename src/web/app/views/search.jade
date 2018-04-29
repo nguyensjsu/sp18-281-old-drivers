@@ -1,0 +1,127 @@
+doctype html
+html(lang='en')
+    head
+        meta(charset='utf-8')
+        meta(name='viewport', content='width=device-width, initial-scale=1, shrink-to-fit=no')
+        meta(name='description', content='')
+        meta(name='author', content='')
+        title Tour Guide for Spartans
+        // Custom Fonts
+        script(src='https://use.fontawesome.com/f9b22d3044.js')
+
+        // Bootstrap core CSS
+        link(rel='stylesheet', href='https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css', integrity='sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ', crossorigin='anonymous')
+
+        // jQuery ui CSS
+        link(rel='stylesheet', href='//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css')
+        script(src='https://code.jquery.com/jquery-1.12.4.js')
+        script(src='https://code.jquery.com/ui/1.12.1/jquery-ui.js')
+        // Custom CSS
+        link(href='stylesheets/test.css', rel='stylesheet')
+
+        // Autocomplete funciton
+        script.
+            $(function () {
+                var availableTags = [
+                    "San Diego",
+                    "Los Angeles",
+                    "San Francisco",
+                    "Seattle",
+                    "Golden Gate Bridge",
+                    "Lake Tahoe",
+                    "Yosemite National Park",
+                    "Napa Valley",
+                    "Alcatraz",
+                    "Mendocino Coast",
+                    "Universal Studios Hollywood",
+                    "Griffith Observatory",
+                    "Disneyland Park",
+                    "Six Flags Magic Mountain",
+                    "Pike Place Market",
+                    "Chihuly Garden and Glass",
+                    "Space Needle",
+                    "Washington State Ferries"
+                ];
+                $("#tags").autocomplete({
+                    source: availableTags
+                });
+            });
+
+    body#page-top
+
+        nav.navbar.navbar-toggleable-md.navbar-light.fixed-top.bg-faded
+            button.navbar-toggler.navbar-toggler-right(type='button', data-toggle='collapse', data-target='#navbarCollapse', aria-controls='navbarCollapse', aria-expanded='false', aria-label='Toggle navigation')
+                span.navbar-toggler-icon
+            a.navbar-brand(href='/')
+                img.img-fluid(src='images/qIXtA.png', height='30px', width='30px')
+            #navbarCollapse.collapse.navbar-collapse
+                ul.navbar-nav.mr-auto
+                    li.nav-item.active
+                        a.nav-link(href='/') Home
+                    li.nav-item
+                        a.nav-link(href='about') About
+                    li.nav-item
+                        a.nav-link(href='contact') Contact
+
+        .container
+            .row.justify-content-center
+                .col-10
+                    h2
+                        i.fa.fa-file-o
+                        |  Search Results
+
+
+
+                    hr
+                    form(action='/search', method='post')
+                        .input-group
+                            input#tags.form-control(type='text', name='key', placeholder='Search...')
+                            span.input-group-btn
+                                button.btn.btn-primary(type='submit')
+                                    i.fa.fa-search
+                    p.lead
+                        strong.text-danger #{results.length}
+                        |  results were found for the search
+                        strong.text-danger &nbsp "#{keyWord}"
+
+
+                    hr
+
+
+
+                    hgroup.mb20
+
+                    each item in results
+                        section.col-xs-12.col-sm-6.col-md-12
+                            article.search-result.row
+                                .col-xs-12.col-sm-12.col-md-3
+                                    a.thumbnail(href='#{item.url}', title='#{item.name}')
+                                        img(src='#{item.images[0]}', alt='#{item.name}', height="150" width="240")
+                                .col-xs-12.col-sm-12.col-md-1
+                                    //ul.meta-search
+                                        li
+                                            i.glyphicon.glyphicon-calendar
+                                            span #{item.info[0]}
+                                        li
+                                            i.glyphicon.glyphicon-time
+                                            span #{item.info[1]}
+                                        li
+                                            i.glyphicon.glyphicon-tags
+                                            span #{item.info[0]}
+                                .col-xs-12.col-sm-12.col-md-8.excerpet
+                                    h3
+                                        a(href='#{item.url}', title='') #{item.name}
+                                    p
+                                        | #{item.description.slice(0, 200)}...
+
+
+                                span.clearfix.borda
+
+
+
+    // Bootstrap JavaScript
+    script(src='https://code.jquery.com/jquery-3.1.1.slim.min.js', integrity='sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n', crossorigin='anonymous')
+    script(src='https://code.jquery.com/jquery-3.2.1.js', integrity='sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE=', crossorigin='anonymous')
+    script(src='https://code.jquery.com/ui/1.12.1/jquery-ui.js')
+    script(src='https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js', integrity='sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb', crossorigin='anonymous')
+    script(src='https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js', integrity='sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn', crossorigin='anonymous')

@@ -1,0 +1,113 @@
+
+doctype html
+html(lang='en')
+    head
+        meta(charset='utf-8')
+        meta(name='viewport', content='width=device-width, initial-scale=1, shrink-to-fit=no')
+        meta(name='description', content='')
+        meta(name='author', content='')
+        link(rel='icon', href='../../favicon.ico')
+        title Tour Guide for Spartans
+        // Custom Fonts
+        script(src='https://use.fontawesome.com/f9b22d3044.js')
+        // Bootstrap core CSS
+        link(rel='stylesheet', href='https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css', integrity='sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ', crossorigin='anonymous')
+        // jQuery ui CSS
+        link(rel='stylesheet', href='//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css')
+        script(src='https://code.jquery.com/jquery-1.12.4.js')
+        script(src='https://code.jquery.com/ui/1.12.1/jquery-ui.js')
+        // Custom CSS
+        link(href='stylesheets/contact.css', rel='stylesheet')
+        // Autocomplete funciton
+        link(href='https://fonts.googleapis.com/css?family=Oleo+Script:400,700', rel='stylesheet')
+        link(href='https://fonts.googleapis.com/css?family=Teko:400,700', rel='stylesheet')
+        link(href='https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css', rel='stylesheet')
+        script.
+            $( function() {
+                var availableTags = [
+                    "San Diego",
+                    "Los Angeles",
+                    "San Francisco",
+                    "Seattle",
+                    "Golden Gate Bridge",
+                    "Lake Tahoe",
+                    "Yosemite National Park",
+                    "Napa Valley",
+                    "Alcatraz",
+                    "Mendocino Coast",
+                    "Universal Studios Hollywood",
+                    "Griffith Observatory",
+                    "Disneyland Park",
+                    "Six Flags Magic Mountain",
+                    "Pike Place Market",
+                    "Chihuly Garden and Glass",
+                    "Space Needle",
+                    "Washington State Ferries"
+                ];
+                $( "#tags" ).autocomplete({
+                    source: availableTags
+                });
+            } );
+            $( function() {
+                $( "#datepicker" ).datepicker({
+                    minDate : 0
+                });
+            } );
+    body
+        nav.navbar.navbar-toggleable-md.navbar-light.fixed-top.bg-faded
+            button.navbar-toggler.navbar-toggler-right(type='button', data-toggle='collapse', data-target='#navbarCollapse', aria-controls='navbarCollapse', aria-expanded='false', aria-label='Toggle navigation')
+                span.navbar-toggler-icon
+            a.navbar-brand(href='/')
+                img.img-fluid(src='images/qIXtA.png', height='30px', width='30px')
+            #navbarCollapse.collapse.navbar-collapse
+                ul.navbar-nav.mr-auto
+                    li.nav-item.active
+                        a.nav-link(href='/') Home
+                    li.nav-item
+                        a.nav-link(href='about') About
+                    li.nav-item
+                        a.nav-link(href='/contact') Contact
+
+        div
+            section#contact
+                .section-content
+                    h1.section-header
+                        | Get in
+                        span.content-header.wow.fadeIn(data-wow-delay='0.2s', data-wow-duration='2s')  Touch with us
+                    h3 As a website, we value our user's review so much! Can't wait to hear from you
+                .contact-section
+                    .container
+                        form
+                            div.row
+                                .col-md-6.form-line
+                                    .form-group
+                                        label Your name
+                                        input#exampleInputUsername.form-control(type='text', placeholder=' Enter Name')
+                                    .form-group
+                                        label(for='exampleInputEmail') Email Address
+                                        input#exampleInputEmail.form-control(type='email', placeholder=' Enter Email id')
+                                    .form-group
+                                        label(for='telephone') Mobile No.
+                                        input#telephone.form-control(type='tel', placeholder=' Enter 10-digit mobile no.')
+                                .col-md-6
+                                    .form-group
+                                        label(for='description')  Message
+                                        textarea#description.form-control(placeholder='Enter Your Message')
+                                    div
+                                        button.btn.btn-default.submit(type='button')
+                                            i.fa.fa-paper-plane(aria-hidden='true')
+                                            |   Send Message
+
+        footer.footer.text-center
+            .container
+                ul.list-inline.mb-5
+                    li.list-inline-item
+                        a.social-link.rounded-circle.text-white.mr-3(href='https://https://https://www.facebook.com/TourGuide-132179940786791/')
+                            i.fa.fa-facebook(aria-hidden='true')
+                    li.list-inline-item
+                        a.social-link.rounded-circle.text-white.mr-3(href='https://www.twitter.com')
+                            i.fa.fa-twitter(aria-hidden='true')
+                    li.list-inline-item
+                        a.social-link.rounded-circle.text-white(href='https://www.github.com')
+                            i.fa.fa-github(aria-hidden='true')
+                p.text-muted.small.mb-0 Copyright © Team 404

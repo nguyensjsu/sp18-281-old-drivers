@@ -1,0 +1,127 @@
+doctype html
+html(lang='en')
+    head
+        meta(charset='utf-8')
+        meta(name='viewport', content='width=device-width, initial-scale=1, shrink-to-fit=no')
+        meta(name='description', content='')
+        meta(name='author', content='')
+        link(rel='icon', href='../../favicon.ico')
+        title Tour Guide for Spartans
+        // Bootstrap core CSS
+        link(rel='stylesheet', href='https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css', integrity='sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ', crossorigin='anonymous')
+        // jQuery ui CSS
+        link(rel='stylesheet', href='//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css')
+        script(src='https://code.jquery.com/jquery-1.12.4.js')
+        script(src='https://code.jquery.com/ui/1.12.1/jquery-ui.js')
+        // Custom CSS
+        link(href='css/homepage.css', rel='stylesheet')
+        link(href='css/result.css', rel='stylesheet')
+        // Autocomplete funciton
+        script.
+            $( function() {
+                var availableTags = [
+                    "San Diego",
+                    "Los Angeles",
+                    "San Francisco",
+                    "Seattle",
+                    "San Jose",
+                    "Santa Barbara"
+                ];
+                $( "#tags" ).autocomplete({
+                    source: availableTags
+                });
+            } );
+            $( function() {
+                $( "#datepicker" ).datepicker({
+                    minDate : 0
+                });
+            } );
+    body
+        nav.navbar.navbar-toggleable-md.navbar-light.fixed-top.bg-faded
+            button.navbar-toggler.navbar-toggler-right(type='button', data-toggle='collapse', data-target='#navbarCollapse', aria-controls='navbarCollapse', aria-expanded='false', aria-label='Toggle navigation')
+                span.navbar-toggler-icon
+            a.navbar-brand(href='/')
+                img.img-fluid(src='images/qIXtA.png', height='30px', width='30px')
+            #navbarCollapse.collapse.navbar-collapse
+                ul.navbar-nav.mr-auto
+                    li.nav-item.active
+                        a.nav-link(href='/') Home
+                    li.nav-item
+                        a.nav-link(href='about') About
+                    li.nav-item
+                        a.nav-link(href='#') Contact
+                    li.nav-item
+                        a.nav-link(href='maps') Map
+                    li.nav-item
+                        a.nav-link(href='bucketlist') BucketList
+                form.form-inline.mt-2.mt-md-0
+                    .ui-widget
+                        input#tags.form-control.mr-sm-2(type='text', placeholder='Search')
+                        button.btn.btn-outline-success.my-2.my-sm-0(type='submit') Search
+                //
+                  <form class="form-inline mt-2 mt-md-0 ui-widget">
+                  <input class="form-control mr-sm-2" id="tags" type="text" placeholder="Search">
+                  <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                  </form>
+                ul.navbar-nav.justify-content-end
+                    li.nav-item
+                    if user
+                        a.nav-link(href='/home') Hello, #{user.firstName}!
+                    else
+                        a.nav-link(href='/login') Join Us
+
+        .container
+            hgroup.mb20
+                h1 Search Results
+                h2.lead
+                    strong.text-danger #{results.length}
+                    |  results were found for the search
+                    strong.text-danger &nbsp #{keyWord}
+            each item in results
+                section.col-xs-12.col-sm-6.col-md-12
+                    article.search-result.row
+                        .col-xs-12.col-sm-12.col-md-3
+                            a.thumbnail(href='#', title='#{item.name}')
+                                img(src='#{item.images[0]}', alt='#{item.name}', height="150" width="240")
+                        .col-xs-12.col-sm-12.col-md-2
+                            ul.meta-search
+                                li
+                                    i.glyphicon.glyphicon-calendar
+                                    span #{item.info[0]}
+                                li
+                                    i.glyphicon.glyphicon-time
+                                    span #{item.info[1]}
+                                li
+                                    i.glyphicon.glyphicon-tags
+                                    span #{item.info[0]}
+                        .col-xs-12.col-sm-12.col-md-7.excerpet
+                            h3
+                                a(href='#', title='') #{item.name} , #{item.info[0]}
+                            p
+                                | #{item.description}
+
+
+                        span.clearfix.borda
+
+
+
+
+
+
+
+
+
+        footer
+            p.float-right
+                a(href='#') Back to top
+            p.float-left
+                | © 2017 Team, 404. ·
+                a(href='#') Privacy
+                |  ·
+                a(href='#') Terms
+        // Bootstrap JavaScript
+        script(src='https://code.jquery.com/jquery-3.1.1.slim.min.js', integrity='sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n', crossorigin='anonymous')
+        script(src='https://code.jquery.com/jquery-3.2.1.js', integrity='sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE=', crossorigin='anonymous')
+        script(src='https://code.jquery.com/ui/1.12.1/jquery-ui.js')
+        script(src='https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js', integrity='sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb', crossorigin='anonymous')
+        script(src='https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js', integrity='sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn', crossorigin='anonymous')
