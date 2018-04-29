@@ -6,14 +6,13 @@ import (
 	"github.com/gorilla/mux"
 	"log"
 	"net/http"
-	"strings"
 )
 
 var redis_server_ip = "127.0.0.1"
-var redis_server_port = 6379
+var redis_server_port int = 6379
 
 type ReviewServer struct {
-	om         *ReviewManager
+	rm         *ReviewManager
 	httpServer *negroni.Negroni
 }
 
@@ -21,35 +20,35 @@ type ReviewServer struct {
 func NewServer() *ReviewServer {
 	n := negroni.Classic()
 	reviewServer := &ReviewServer{
-		om:         NewReviewManager(redis_server_ip, redis_server_port),
+		rm:         NewReviewManager(redis_server_ip, redis_server_port),
 		httpServer: n}
 	log.Println("Create ReviewServer")
 	return reviewServer
 }
 
-func (os *ReviewServer) Init() {
+func (rs *ReviewServer) Init() {
 	mx := mux.NewRouter()
-	os.initRouteTable(mx)
-	os.httpServer.UseHandler(mx)
+	rs.initRouteTable(mx)
+	rs.httpServer.UseHandler(mx)
 	log.Println("Init HTTP Request Route")
 }
 
-func (os *ReviewServer) Run() {
-	os.httpServer.Run()
+func (rs *ReviewServer) Run() {
+	rs.httpServer.Run()
 }
 
-func (os *ReviewServer) initRouteTable(mx *mux.Router) {
-	mx.HandleFunc("/review", os.createReview).Methods("POST")
-	mx.HandleFunc("/review/{reviewid}", os.getReview).Methods("GET")
-	mx.HandleFunc("/review/{reviewid}", os.updateReview).Methods("POST")
-	mx.HandleFunc("/review/{reviewid}", os.deleteReview).Methods("DELETE")
-	mx.HandleFunc("/review", os.getReviewByUser).Methods("GET")
+func (rs *ReviewServer) initRouteTable(mx *mux.Router) {
+	mx.HandleFunc("/review", rs.createReview).Methods("POST")
+	mx.HandleFunc("/review/{reviewid}", rs.getReview).Methods("GET")
+	mx.HandleFunc("/review/{reviewid}", rs.updateReview).Methods("POST")
+	mx.HandleFunc("/review/{reviewid}", rs.deleteReview).Methods("DELETE")
+	mx.HandleFunc("/review", rs.getReviewByUser).Methods("GET")
 }
 
-func (os *ReviewServer) getReview(w http.ResponseWriter, req *http.Request) {
+func (rs *ReviewServer) getReview(w http.ResponseWriter, req *http.Request) {
 	params := mux.Vars(req)
 	reviewId := params["reviewid"]
-	val, ok := os.om.GetReview(reviewId)
+	val, ok := rs.rm.GetReview(reviewId)
 	if !ok {
 		w.WriteHeader(http.StatusNotFound)
 		w.Write([]byte("Review not exist"))
@@ -60,8 +59,8 @@ func (os *ReviewServer) getReview(w http.ResponseWriter, req *http.Request) {
 	log.Printf("GET Review %v\n", ok)
 }
 
-func (os *ReviewServer) createReview(w http.ResponseWriter, req *http.Request) {
-	userId := req.FormValue("reviewid")
+func (rs *ReviewServer) createReview(w http.ResponseWriter, req *http.Request) {
+	userId := req.FormValue("userId")
 	if len(userId) == 0 {
 		w.WriteHeader(http.StatusBadRequest)
 		w.Write([]byte("Invalid parameter"))
@@ -69,7 +68,9 @@ func (os *ReviewServer) createReview(w http.ResponseWriter, req *http.Request) {
 	}
 
 	item := req.FormValue("item")
-	val, ok := os.om.CreateReview(userId, item)
+	content := req.FormValue("content")
+
+	val, ok := rs.rm.CreateReview(userId, item, content)
 	if !ok {
 		w.WriteHeader(http.StatusBadRequest)
 		w.Write([]byte("Review not exist"))
@@ -80,37 +81,21 @@ func (os *ReviewServer) createReview(w http.ResponseWriter, req *http.Request) {
 	log.Printf("CREATE Review %v\n", ok)
 }
 
-func (os *ReviewServer) updateReview(w http.ResponseWriter, req *http.Request) {
+func (rs *ReviewServer) updateReview(w http.ResponseWriter, req *http.Request) {
 	params := mux.Vars(req)
 	reviewid := params["reviewid"]
+	newContent := req.FormValue("content")
+
 	var review Review
-	reviewJson, ok := os.om.GetReview(reviewid)
+	reviewJson, ok := rs.rm.GetReview(reviewid)
 	if !ok {
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
 
 	json.Unmarshal([]byte(reviewJson), &review)
-	addItems := strings.Split(req.FormValue("add"), ",")
-	delItems := strings.Split(req.FormValue("delete"), ",")
 
-	items := make(map[string]string)
-	item := review.Item
-	items[item] = item
-
-	for _, del := range delItems {
-		delete(items, del)
-	}
-
-	for _, add := range addItems {
-		items[add] = add
-	}
-
-	review.Item = review.Item
-	for k, _ := range items {
-		review.Items = append(review.Items, k)
-	}
-	ok = os.om.UpdateReview(&review)
+	ok = rs.rm.UpdateReview(&review, newContent)
 	if !ok {
 		w.WriteHeader(http.StatusBadRequest)
 		w.Write([]byte("Update review failed"))
@@ -122,10 +107,10 @@ func (os *ReviewServer) updateReview(w http.ResponseWriter, req *http.Request) {
 	log.Printf("UPDATE Review %v\n", ok)
 }
 
-func (os *ReviewServer) deleteReview(w http.ResponseWriter, req *http.Request) {
+func (rs *ReviewServer) deleteReview(w http.ResponseWriter, req *http.Request) {
 	params := mux.Vars(req)
 	reviewId := params["reviewid"]
-	ok := os.om.DeleteReview(reviewId)
+	ok := rs.rm.DeleteReview(reviewId)
 	if !ok {
 		w.WriteHeader(http.StatusBadRequest)
 		w.Write([]byte("Delete review failed"))
@@ -136,15 +121,15 @@ func (os *ReviewServer) deleteReview(w http.ResponseWriter, req *http.Request) {
 	log.Printf("DELETE Review %v\n", ok)
 }
 
-func (os *ReviewServer) getReviewByUser(w http.ResponseWriter, req *http.Request) {
-	userId := req.FormValue("reviewid")
-	if len(userId) == 0 {
+func (rs *ReviewServer) getReviewByUser(w http.ResponseWriter, req *http.Request) {
+	reviewid := req.FormValue("reviewid")
+	if len(reviewid) == 0 {
 		w.WriteHeader(http.StatusBadRequest)
 		w.Write([]byte("Invalid Parameter"))
 		return
 	}
 
-	reviews, ok := os.om.GetReviewByInventory(userId)
+	reviews, ok := rs.rm.GetReviewByReviewId(reviewid)
 	if !ok {
 		w.WriteHeader(http.StatusBadRequest)
 		w.Write([]byte("Get review by user failed"))
