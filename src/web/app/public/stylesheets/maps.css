@@ -1,0 +1,46 @@
+
+/* nav bar left */
+.navbar_left {
+    overflow: hidden;
+    background-color: white;
+    position: absolute;
+    top: 4%;
+    right: calc(50% + 140px); /* relative position to the center */
+    display: block;
+    margin-bottom: 10px;
+    word-spacing: 15px;
+}
+.navbar_left a {
+    font-size: 25px;
+    text-decoration: none;
+    color: #000;
+}
+/* nav bar right */
+.navbar_right {
+    overflow: hidden;
+    background-color: white;
+    position: absolute;
+    top: 4%;
+    left: calc(50% + 400px); /* relative postion to the center */
+    display: block;
+    margin-bottom: 10px;
+}
+.navbar_right a {
+    font-size: 25px;
+    text-decoration: none;
+    color: #000;
+}
+a:hover {
+    text-decoration: underline;
+}
+
+
+#resizable {
+    width: 300px;
+    \height: 1000px;
+    padding: 1.2em;
+}
+#resizable h3 {
+    text-align: center;
+    margin: 0;
+}
