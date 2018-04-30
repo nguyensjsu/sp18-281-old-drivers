@@ -1,6 +1,6 @@
 # CMPE281-old-drivers
 
-| Team Members  |
+|    Drivers    |
 | ------------- |
 |    Yue Yin    |
 |   Han Chen    |
