@@ -3,12 +3,142 @@ var router = express.Router();
 var Place = require('../models/place');
 var ObjectId = require('mongodb').ObjectId;
 
+var Request = require("request");
+
 router.get('/about', function(req, res, next) {
 
+    Request.get("http://localhost:8080/inventory/3b0fa0dc-6e35-4cb4-bd6f-cfaf71ef9c13", (error, response, body) => {
+        if(error) {
+           return console.dir(error);
+        }
+        console.dir(JSON.parse(body));
 
-        res.render('about',{});
+        result = JSON.parse(body)
+
+        res.render('about',{inventory: result});
+    });
 
 });
+
+router.get('/product', function(req, res, next) {
+
+    Request.get("http://localhost:8080/inventory/", (error, response, body) => {
+        if(error) {
+           return console.dir(error);
+        }
+        console.dir(JSON.parse(body));
+
+        result = JSON.parse(body)
+
+        res.render('cities_test',{americano: result});
+    });
+
+    Request.get("http://localhost:8080/inventory/", (error, response, body) => {
+        if(error) {
+           return console.dir(error);
+        }
+        console.dir(JSON.parse(body));
+
+        result = JSON.parse(body)
+
+        res.render('cities_test',{latte: result});
+    });
+
+    Request.get("http://localhost:8080/inventory/", (error, response, body) => {
+        if(error) {
+           return console.dir(error);
+        }
+        console.dir(JSON.parse(body));
+
+        result = JSON.parse(body)
+
+        res.render('cities_test',{mocha: result});
+    });
+
+    Request.get("http://localhost:8080/inventory/", (error, response, body) => {
+        if(error) {
+           return console.dir(error);
+        }
+        console.dir(JSON.parse(body));
+
+        result = JSON.parse(body)
+
+        res.render('cities_test',{cappuccino: result});
+    });
+
+});
+
+
+
+router.get('/americano', function(req, res, next) {
+
+    Request.get("http://localhost:8080/inventory/", (error, response, body) => {
+        if(error) {
+           return console.dir(error);
+        }
+        console.dir(JSON.parse(body));
+
+        result = JSON.parse(body)
+
+        res.render('places_test',{americano: result});
+    });
+
+});
+
+router.get('/latte', function(req, res, next) {
+
+    Request.get("http://localhost:8080/inventory/", (error, response, body) => {
+        if(error) {
+           return console.dir(error);
+        }
+        console.dir(JSON.parse(body));
+
+        result = JSON.parse(body)
+
+        res.render('places_test',{latte: result});
+    });
+
+});
+
+router.get('/mocha', function(req, res, next) {
+
+    Request.get("http://localhost:8080/inventory/", (error, response, body) => {
+        if(error) {
+           return console.dir(error);
+        }
+        console.dir(JSON.parse(body));
+
+        result = JSON.parse(body)
+
+        res.render('places_test',{mocha: result});
+    });
+
+});
+
+router.get('/cappuccino', function(req, res, next) {
+
+    Request.get("http://localhost:8080/inventory/", (error, response, body) => {
+        if(error) {
+           return console.dir(error);
+        }
+        console.dir(JSON.parse(body));
+
+        result = JSON.parse(body)
+
+        res.render('places_test',{cappuccino: result});
+    });
+
+});
+
+
+
+
+
+
+
+
+
+
 
 router.get('/seattle', function(req, res, next) {
 

@@ -38,8 +38,10 @@ html(lang='en')
                 ul.navbar-nav.mr-auto
                     li.nav-item.active
                         a.nav-link(href='/') Home
+                    li.nav-item.active
+                        a.nav-link(href='/product') Product
                     li.nav-item
-                        a.nav-link(href='about') About
+                        a.nav-link(href='/about') About
                     li.nav-item
                         a.nav-link(href='/contact') Contact
                 form.form-inline.mt-2.mt-md-0
@@ -49,7 +51,7 @@ html(lang='en')
                 ul.navbar-nav.justify-content-end
                     li.nav-item
                         if user
-                            a.nav-link(href='/home') Hello, #{user.firstName}!
+                            a.nav-link(href='/home') Hello, #{}!
                         else
                             a.nav-link(href='/login') Join Us
 
@@ -58,39 +60,51 @@ html(lang='en')
             .row
                 .col-1
                 .col-10
-                    h2 #{items.name}
+                    h2 #{inventory.InventoryName}
                     hr
 
 
             .row.justify-content-center
                 .col-5
-                    h4 Description
-                    p #{items.description}
+                    h4 Price
+                    p $ #{inventory.InventoryPrice}
 
                     hr
 
-                    h4 Contact
+                    
+                    h4 Inventory
+                    <!--
                     i.fa.fa-external-link(aria-hidden='true')
                     a(href='#{items.website}') Website
                     br
-                    i.fa.fa-phone(aria-hidden='true')
-                    |   +1 #{items.info[1]}
+                    i.fa.fa-phone(aria-hidden='true') -->
+                    |   #{inventory.Amount}
 
                     hr
 
+                    button(onclick='#{newOrder}') Buy
+                    
+                    <!--
                     h4 Nearby Places
                     for scene in items.scenes
                         i.fa.fa-external-link(aria-hidden='true')
                         a(href='#{scene.url}') #{scene.name}
                         br
+                    -->
 
+                .col-5#pics
+                    iframe(width='100%', height='450px', frameborder='0', style='border:0', 
+                    src='https://static1.squarespace.com/static/580fef93414fb5635ebb4c10/5a61310464b05fc422c84c62/5a8b4a4274b76c546716ff78/1519077962347/')
+
+
+                <!--
                 .col-5#map
                     iframe(width='100%', height='450px', frameborder='0', style='border:0', src='https://www.google.com/maps/embed/v1/place?key=AIzaSyD24HTaCZNl759ZbQduQKfitIi2hOCAULw&q=#{items.name}', allowfullscreen)
-
+                -->
 
         hr
 
-
+        <!--
         .container#slide
             .map.map-1(style="background-image:url('#{items.images[0]}')")
             .map.map-2(style="background-image:url('#{items.images[1]}')")
@@ -98,20 +112,19 @@ html(lang='en')
 
 
         hr
+        -->
 
         .row.justify-content-center
             .col-md-8.comments
-
-
 
                 if user
                     .comment-wrap
                         .photo
                             .avatar(style="background-image: url('https://s3.amazonaws.com/uifaces/faces/twitter/dancounsell/128.jpg')")
                         .comment-block
-                            form(action='/addReview' method='post')
-                                input(name='place', value='#{items.name}', type='hidden')
-                                textarea(name='content', id='textarea1' cols='30', rows='3', placeholder='Add comment...')
+                            form(action='/insert' method='post')
+                                input(name='place', value='', type='hidden')
+                                textarea(name='content', id='textarea1' cols='30', rows='3', placeholder='Add review...')
                                 button.btn.icon-btn.btn-primary(type='submit')
                                     i.fa.fa-share-square-o(aria-hidden='true')
                                     span.img-circle.text-info
@@ -122,15 +135,15 @@ html(lang='en')
 
                 .float-right
 
-                for review in items.reviews
+                // for review in items.reviews
                     .comment-wrap
                         .photo
-                            img.avatar(src='#{items.images[0]}')
+                            img.avatar(style="background-image: url('https://s3.amazonaws.com/uifaces/faces/twitter/dancounsell/128.jpg')")
                         .comment-block
-                            p.comment-text #{review.content}
+                            p.comment-text #{review.Content}
                             .bottom-comment
-                                .comment-date #{review.createDate}
-
+                                .comment-date #{review.Date}
+                            
         hr
 
         // Footer

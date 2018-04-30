@@ -7,8 +7,28 @@ module.exports = function(passport){
 	passport.use('signup', new LocalStrategy({
             passReqToCallback : true // allows us to pass back the entire request to the callback
         },
-        function(req, username, password, done) {
+        function(req, name, password, done) {
 
+
+            Request.post({
+                "headers": { "content-type": "application/json" },
+                "url": "http://user/",
+                "body": JSON.stringify({
+                    "Name": req.body.name,
+                    "Phone": req.body.phone
+                    "Balance": req.body.balance
+                })}, (error, response, body) => {
+                if(error) {
+                    return console.dir(error);
+                }
+                console.dir(JSON.parse(body));
+
+
+                });
+
+            res.redirect('/login')
+
+            /*
             findOrCreateUser = function(){
                 // find a user in Mongo with provided username
                 User.findOne({ 'username' :  username }, function(err, user) {
@@ -44,16 +64,16 @@ module.exports = function(passport){
                         });
                     }
                 });
-            };
+            };*/
             // Delay the execution of findOrCreateUser and execute the method
             // in the next tick of the event loop
-            process.nextTick(findOrCreateUser);
+            // process.nextTick(findOrCreateUser);
         })
     );
 
-    // Generates hash using bCrypt
+    /* Generates hash using bCrypt
     var createHash = function(password){
         return bCrypt.hashSync(password, bCrypt.genSaltSync(10), null);
-    }
+    }*/
 
 }

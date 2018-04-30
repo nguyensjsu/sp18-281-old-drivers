@@ -5,10 +5,11 @@ var bCrypt = require('bcrypt-nodejs');
 module.exports = function(passport){
 
 	passport.use('login', new LocalStrategy({
-            passReqToCallback : true
-        },
-        function(req, username, password, done) { 
+            passReqToCallback : true },
+            function(req, name, password, done) { 
             // check in mongo if a user with username exists or not
+
+            /*
             User.findOne({ 'username' :  username }, 
                 function(err, user) {
                     // In case of any error, return using the done method
@@ -27,15 +28,35 @@ module.exports = function(passport){
                     // User and password both match, return user from done method
                     // which will be treated like success
                     return done(null, user);
+                } 
+            ); */
+
+                if (password = "1") {
+                    Request.get("http://localhost:8080/user/", (error, response, body) => {
+                        if(error) {
+                           return console.dir(error);
+                        }
+                        console.dir(JSON.parse(body));
+
+                        result = JSON.parse(body)
+
+                        res.render('home',{user: result});
+
+
+                    });
                 }
-            );
+
+                
+            
+
+            }
 
         })
     );
 
-
+    /*
     var isValidPassword = function(user, password){
         return bCrypt.compareSync(password, user.password);
     }
-    
+    */
 }

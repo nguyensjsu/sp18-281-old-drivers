@@ -9,12 +9,14 @@ router.get('/maps', function(req, res, next) {
 
 });
 
+/* 
 router.get('/bucketlist', function(req, res, next) {
 
 
     res.render('bucketlist', {});
 
 });
+*/
 
 router.get('/contact', function(req,res){
    res.render('contact', {user: req.user});
@@ -27,6 +29,7 @@ router.get('/places', function(req, res, next) {
 
 });
 
+/*
 router.get('/SD_intro', function(req, res, next) {
 
 
@@ -47,5 +50,6 @@ router.get('/SD_tour', function(req, res, next) {
     res.render('../place/SD_tour', {});
 
 });
+*/
 
 module.exports = router;

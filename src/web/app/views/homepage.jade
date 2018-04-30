@@ -23,24 +23,10 @@ html(lang='en')
         script.
             $( function() {
                 var availableTags = [
-                    "San Diego",
-                    "Los Angeles",
-                    "San Francisco",
-                    "Seattle",
-                    "Golden Gate Bridge",
-                    "Lake Tahoe",
-                    "Yosemite National Park",
-                    "Napa Valley",
-                    "Alcatraz",
-                    "Mendocino Coast",
-                    "Universal Studios Hollywood",
-                    "Griffith Observatory",
-                    "Disneyland Park",
-                    "Six Flags Magic Mountain",
-                    "Pike Place Market",
-                    "Chihuly Garden and Glass",
-                    "Space Needle",
-                    "Washington State Ferries"
+                    "Americano",
+                    "Latte",
+                    "Mocha",
+                    "Cappuccino"
                 ];
                 $( "#tags" ).autocomplete({
                     source: availableTags
@@ -59,9 +45,13 @@ html(lang='en')
                     li.nav-item.active
                         a.nav-link(href='/') Home
                     li.nav-item
-                        a.nav-link(href='about') About
+                        a.nav-link(href='/product') Product
+                    li.nav-item
+                        a.nav-link(href='/about') About
                     li.nav-item
                         a.nav-link(href='/contact') Contact
+                    li.nav-item
+                        a.nav-link(href='/order') Order
 
 
                 form.form-inline.mt-2.mt-md-0(action='/search', method='post')
@@ -73,7 +63,7 @@ html(lang='en')
                 ul.navbar-nav.justify-content-end
                     li.nav-item
                     if user
-                        a.nav-link(href='/home') Hello, #{user.firstName}!
+                        a.nav-link(href='/home') Hello, #{user.}!
                     else
                         a.nav-link(href='/login') Join Us
 
@@ -122,6 +112,9 @@ html(lang='en')
                 span.carousel-control-next-icon(aria-hidden='true')
                 span.sr-only Next
 
+
+
+        <!--
         // Card component
         .row.align-self-center.justify-content-center
             .col-sm-3
@@ -158,6 +151,9 @@ html(lang='en')
                             | near Fisherman's Wharf, San Francisco. Hornblower Cruises and Events, operating under the
                             | name Alcatraz Cruises, is the official ferry provider to and from the island.
                         a.btn.btn-primary(href='/alcatraz') Details
+        -->
+
+        <!--
 
         hr.featurette-divider
 
@@ -197,6 +193,8 @@ html(lang='en')
 
         hr.featurette-divider
 
+        -->
+
         // Footer
         footer.footer.text-center
             .container
@@ -210,7 +208,7 @@ html(lang='en')
                     li.list-inline-item
                         a.social-link.rounded-circle.text-white(href='https://www.github.com')
                             i.fa.fa-github(aria-hidden='true')
-                p.text-muted.small.mb-0 Copyright © Team 404
+                p.text-muted.small.mb-0 Copyright © Old Drivers
 
         // Bootstrap JavaScript
         script(src='https://code.jquery.com/jquery-3.1.1.slim.min.js', integrity='sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n', crossorigin='anonymous')

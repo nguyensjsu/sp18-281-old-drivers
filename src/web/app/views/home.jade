@@ -8,9 +8,22 @@ block content
 					h1.text-center.login-title Welcome #{user.firstName}, you are already logged in. Check your details below:
 						div.signup-wall
 							ul.user-details
-								li Username ---> #{user.username}
-								li Email    ---> #{user.email}
-								li First Name ---> #{user.firstName} 
-								li Last Name ---> #{user.lastName}
+								li Name ---> #{user.}
+								li Phone    ---> #{user.}
+								li Balance ---> #{user.}
+						div.order-wall
+							ul.order-details
+								// for item in orders.items
+                    				.comment-wrap
+                        				.photo
+                            				img.avatar(style="background-image: url('https://s3.amazonaws.com/uifaces/faces/twitter/dancounsell/128.jpg')")
+                        			.comment-block
+                            			p.comment-text #{orders.orderId}
+                            			p.comment-text #{orders.items}
+		                            
+		                            .bottom-comment
+		                                .comment-date #{orders.Date}
+		                            
+
 						a(href='/signout', class='text-center new-account') Sign Out
 						a(href='/', class='text-center new-account') Homepage
