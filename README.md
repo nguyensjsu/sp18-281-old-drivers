@@ -1,6 +1,6 @@
 # CMPE281-old-drivers
 
-|    Drivers    |
+|Drivers        |
 | ------------- |
 |    Yue Yin    |
 |   Han Chen    |
