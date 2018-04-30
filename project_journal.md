@@ -214,6 +214,18 @@ Status code 204.
 ```
 
 #### 3.6 User Management Subsystem (04/18/2018)
+---
+Data structure
+```
+type User struct {
+    UserId string
+    UserName string
+    Phone string
+    Balance int
+}
+```
+
+APIs
 
 * Add a new user
 ```
