@@ -77,12 +77,13 @@ html(lang='en')
                     i.fa.fa-external-link(aria-hidden='true')
                     a(href='#{items.website}') Website
                     br
-                    i.fa.fa-phone(aria-hidden='true') -->
+                    i.fa.fa-phone(aria-hidden='true') 
+                    -->
                     |   #{inventory.Amount}
 
                     hr
 
-                    button(onclick='#{newOrder}') Buy
+                    button.btn.btn-primary.btn-sm(type='button', onclick='/addOrder') Buy
                     
                     <!--
                     h4 Nearby Places
