@@ -5,7 +5,7 @@ var UserReview = require('../models/review');
 
 router.get('/display', function(req, res, next) {
 
-  Request.get("http://localhost:8080/review/", (error, response, body) => {
+    Request.get("http://localhost:8080/review/", (error, response, body) => {
         if(error) {
            return console.dir(error);
         }
@@ -13,7 +13,7 @@ router.get('/display', function(req, res, next) {
 
         result = JSON.parse(body)
 
-        res.render('places_test',{review: result});
+        res.render('detail',{review: result});
     });
 
 
@@ -43,9 +43,11 @@ router.post('/insert', function(req, res, next) {
 
 })
 
+
+// not functional
 router.get('/update', function(req, res, next) {
 
-  Request.get("http://localhost:8080/review/", (error, response, body) => {
+    Request.get("http://localhost:8080/review/", (error, response, body) => {
         if(error) {
            return console.dir(error);
         }
@@ -53,15 +55,17 @@ router.get('/update', function(req, res, next) {
 
         result = JSON.parse(body)
 
-        res.render('places_test',{review: result});
+        res.render('detail',{review: result});
     });
 
 
 })
 
+
+// not functional
 router.get('/delete', function(req, res, next) {
 
-  Request.get("http://localhost:8080/review/", (error, response, body) => {
+    Request.get("http://localhost:8080/review/", (error, response, body) => {
         if(error) {
            return console.dir(error);
         }
@@ -69,7 +73,7 @@ router.get('/delete', function(req, res, next) {
 
         result = JSON.parse(body)
 
-        res.render('places_test',{review: result});
+        res.render('detail',{review: result});
     });
 
 

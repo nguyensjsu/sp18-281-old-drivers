@@ -63,7 +63,7 @@ html(lang='en')
                 ul.navbar-nav.justify-content-end
                     li.nav-item
                     if user
-                        a.nav-link(href='/home') Hello, #{user.}!
+                        a.nav-link(href='/home') Hello, #{user.UserName}!
                     else
                         a.nav-link(href='/login') Join Us
 
@@ -77,34 +77,32 @@ html(lang='en')
                     img.first-slide(src='images/homeslide1.jpg', alt='First slide')
                     .container
                         .carousel-caption.d-none.d-md-block.text-left
-                            h1 Golden Gate Bridge
+                            h1 All about coffee
                             p
-                                | The Golden Gate Bridge is a suspension bridge spanning the Golden Gate,
-                                | the one-mile-wide (1.6 km) strait connecting San Francisco Bay and
-                                | the Pacific Ocean.
+                                | go ahead and grab that cup of joe, or two, or more. 
+                                | Doing so may improve your health and help you live longer.
                             p
-                                a.btn.btn-lg.btn-primary(href='/golden-gate-bridge', role='button') Details
+                                a.btn.btn-lg.btn-primary(href='/latte', role='button') Details
                 .carousel-item
                     img.second-slide(src='images/homeslide2.jpg', alt='Second slide')
                     .container
                         .carousel-caption.d-none.d-md-block
-                            h1 Space Needle
+                            h1 Facts
                             p
-                                | The Space Needle is an observation tower in Seattle, Washington,
-                                | a landmark of the Pacific Northwest, and an icon of Seattle.
+                                | 7 Facts About Coffee You Probably Didn’t Know
                             p
-                                a.btn.btn-lg.btn-primary(href='/seattle', role='button') Explore Seattle
+                                a.btn.btn-lg.btn-primary(href='/mocha', role='button') Explore Seattle
                 .carousel-item
-                    img.third-slide(src='images/homeslide4.jpg', alt='Third slide')
+                    img.third-slide(src='images/homeslide3.jpg', alt='Third slide')
                     .container
                         .carousel-caption.d-none.d-md-block.text-right
-                            h1 Sunset in San Diego
+                            h1 Join The Group
                             p
-                                i Sunset is still my favorite color, and rainbow is second.
+                                i Coffee is a diuretic
                             p
-                                i by Mattie Stepanek
+                                i by Coffee
                             p
-                                a.btn.btn-lg.btn-primary(href='/san-diego', role='button') Plan your tour
+                                a.btn.btn-lg.btn-primary(href='/americano', role='button') Plan your tour
             a.carousel-control-prev(href='#myCarousel', role='button', data-slide='prev')
                 span.carousel-control-prev-icon(aria-hidden='true')
                 span.sr-only Previous

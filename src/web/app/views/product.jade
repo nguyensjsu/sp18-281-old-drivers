@@ -1,0 +1,172 @@
+doctype html
+html(lang='en')
+    head
+        meta(charset='utf-8')
+        meta(name='viewport', content='width=device-width, initial-scale=1, shrink-to-fit=no')
+        meta(name='description', content='')
+        meta(name='author', content='')
+        title Tour Guide for Spartans
+        // Custom Fonts
+        script(src='https://use.fontawesome.com/f9b22d3044.js')
+
+        // Bootstrap core CSS
+        link(rel='stylesheet', href='https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css', integrity='sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ', crossorigin='anonymous')
+
+        // Custom CSS
+        link(href='stylesheets/cities_test.css', rel='stylesheet')
+    body#page-top
+
+        nav.navbar.navbar-toggleable-md.navbar-light.fixed-top.bg-faded
+            button.navbar-toggler.navbar-toggler-right(type='button', data-toggle='collapse', data-target='#navbarCollapse', aria-controls='navbarCollapse', aria-expanded='false', aria-label='Toggle navigation')
+                span.navbar-toggler-icon
+            a.navbar-brand(href='#')
+                img.img-fluid(src='images/qIXtA.png', height='30px', width='30px')
+            #navbarCollapse.collapse.navbar-collapse
+                ul.navbar-nav.mr-auto
+                    li.nav-item.active
+                        a.nav-link(href='/') Home
+                    li.nav-item
+                        a.nav-link(href='/product') Product
+                    li.nav-item
+                        a.nav-link(href='/about') About
+                    li.nav-item
+                        a.nav-link(href='/contact') Contact
+                form.form-inline.mt-2.mt-md-0
+                    .ui-widget
+                        input#tags.form-control.mr-sm-2(type='text', placeholder='Search')
+                        button.btn.btn-outline-success.my-2.my-sm-0(type='submit') Search
+                ul.navbar-nav.justify-content-end
+                    li.nav-item
+                        if user
+                            a.nav-link(href='/home') Hello, #{user.}!
+                        else
+                            a.nav-link(href='/login') Join Us
+
+        
+        // Header
+        header.masthead.d-flex
+          .container.text-center.my-auto
+            h1.mb-1 Coffee
+            h3.mb-5
+              em What we have
+          .overlay
+
+
+        <!--
+        // Services
+        section#services.content-section.bg-primary.text-white.text-center
+          .container
+            .content-section-heading
+              h3.text-secondary.mb-0 Services
+              h2.mb-5 Explore The City
+            .row
+              .col-lg-3.col-md-6.mb-5.mb-lg-0
+                span.service-icon.rounded-circle.mx-auto.mb-3
+                    i.fa.fa-cutlery.fa-3x(aria-hidden='true')
+                h4
+                  strong Restaurant
+                a(href='#{inventorys.InventoryName}')
+                    p.text-faded.mb-0 Looking for great local food!
+              .col-lg-3.col-md-6.mb-5.mb-lg-0
+                span.service-icon.rounded-circle.mx-auto.mb-3
+                    i.fa.fa-taxi.fa-3x(aria-hidden='true')
+                h4
+                  strong Transportation
+                a(href='#{inventorys.InventoryName}')
+                    p.text-faded.mb-0 Get around in the city
+              .col-lg-3.col-md-6.mb-5.mb-md-0
+                span.service-icon.rounded-circle.mx-auto.mb-3
+                    i.fa.fa-university.fa-3x(aria-hidden='true')
+                h4
+                  strong Government
+                a(href='#{inventorys.Amount}')
+                    p.text-faded.mb-0
+                    | We&nbsp;
+                    i.fa.fa-heart
+                    | &nbsp;to help
+              .col-lg-3.col-md-6
+                span.service-icon.rounded-circle.mx-auto.mb-3
+                    i.fa.fa-thermometer-empty.fa-3x(aria-hidden='true')
+                h4
+                  strong Weather
+                a(href='#{inventorys.InventoryName}')
+                    p.text-faded.mb-0 Stay with comfort
+        -->
+
+
+
+        // Portfolio
+        section#portfolio.content-section
+            .container
+                .content-section-heading.text-center
+                    h3.text-secondary.mb-0 CITY
+                    h2.mb-5 Our Product
+                .row.no-gutters
+                    .col-lg-6
+                        a.portfolio-item(href='/americano')
+                            span.caption
+                                span.caption-content
+                                    h2 #{americano.InventoryName}
+                                    p.mb-0
+                            img.img-fluid(src='https://cdn.shopify.com/s/files/1/0775/2687/products/136f4381d0ec3f37f4cf7839a822b7c0aee6c617_530x@2x.jpg?v=1520319467', alt='')
+                    .col-lg-6
+                        a.portfolio-item(href='/latte')
+                            span.caption
+                                span.caption-content
+                                    h2 #{latte.InventoryName}
+                                    p.mb-0
+                            img.img-fluid(src='https://d1alt1wkdk73qo.cloudfront.net/images/guide/05ddb8fbb5bd7b302fdc48b5cced7512/640x478_ac.jpg', alt='')
+                    .col-lg-6
+                        a.portfolio-item(href='/mocha')
+                            span.caption
+                                span.caption-content
+                                    h2 #{mocha.InventoryName}
+                                    p.mb-0
+                            img.img-fluid(src='https://img.taste.com.au/ahzHXQxh/w720-h480-cfill-q80/taste/2016/11/devilish-hot-chocolate-mocha-34999-1.jpeg}', alt='')
+                    .col-lg-6
+                        a.portfolio-item(href='/cappuccino')
+                            span.caption
+                                span.caption-content
+                                    h2 #{cappuccino.InventoryName}
+                                    p.mb-0
+                            img.img-fluid(src='https://wallingfordcoffee.com/wp-content/uploads/2014/11/product-capp.jpg', alt='')
+
+
+        // Call to Action
+        section.content-section.bg-primary.text-white
+            .container.text-center
+                h2.mb-4 About
+                i.fa.fa-external-link(aria-hidden='true')
+                a(href='/about') &nbsp;Official Website
+                | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                i.fa.fa-phone(aria-hidden='true')
+                |   &nbsp;+1 123456789
+        // Map
+        section#contact.map
+            iframe(width='100%', height='100%', frameborder='0', scrolling='no', marginheight='0', marginwidth='0', src='https://www.google.com/maps/embed/v1/place?key=AIzaSyD24HTaCZNl759ZbQduQKfitIi2hOCAULw&q=sanjose' allowfullscreen)
+            br
+            small
+                a(href='https://maps.google.com/maps?f=q&source=embed&hl=en&geocode=&q=sanjose')
+        // Footer
+        footer.footer.text-center
+            .container
+                ul.list-inline.mb-5
+                    li.list-inline-item
+                        a.social-link.rounded-circle.text-white.mr-3(href='https://www.facebook.com')
+                            i.fa.fa-facebook(aria-hidden='true')
+                    li.list-inline-item
+                        a.social-link.rounded-circle.text-white.mr-3(href='https://twitter.com')
+                            i.fa.fa-twitter(aria-hidden='true')
+                    li.list-inline-item
+                        a.social-link.rounded-circle.text-white(href='https://www.github.com')
+                            i.fa.fa-github(aria-hidden='true')
+                p.text-muted.small.mb-0 Copyright © Old Drivers
+
+        // Bootstrap JavaScript
+        script(src='https://code.jquery.com/jquery-3.1.1.slim.min.js', integrity='sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n', crossorigin='anonymous')
+        script(src='https://code.jquery.com/jquery-3.2.1.js', integrity='sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE=', crossorigin='anonymous')
+        script(src='https://code.jquery.com/ui/1.12.1/jquery-ui.js')
+        script(src='https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js', integrity='sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb', crossorigin='anonymous')
+        script(src='https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js', integrity='sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn', crossorigin='anonymous')
+
+
