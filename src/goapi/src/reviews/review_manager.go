@@ -4,27 +4,26 @@ import (
 	"encoding/json"
 	"github.com/go-redis/redis"
 	"github.com/satori/go.uuid"
-	"time"
 	"log"
-	"strconv"
+	"time"
+	"util"
 )
 
 type ReviewManager struct {
-	redisClient *redis.Client
+	redisClient *redis.ClusterClient
 }
 
 type Review struct {
 	ReviewId string
-	UserId  string
-	Item    string
-	Content string
-	Date    string
+	UserId   string
+	Item     string
+	Content  string
+	Date     string
 }
 
-func NewReviewManager(ipAddr string, port int) *ReviewManager {
-	addr := ipAddr + ":" + strconv.Itoa(port)
-	client := redis.NewClient(&redis.Options{
-		Addr: addr})
+func NewReviewManager(addrs []string) *ReviewManager {
+	client := redis.NewClusterClient(&redis.ClusterOptions{
+		Addrs: addrs})
 
 	rm := &ReviewManager{
 		redisClient: client}
@@ -36,13 +35,14 @@ func (rm *ReviewManager) isOpen() bool {
 }
 
 // return ReviewJsonString, success
-func (rm *ReviewManager) GetReview(reviewId string) (string, bool) {
+func (rm *ReviewManager) GetReview(userId string, reviewId string) (string, bool) {
 	if !rm.isOpen() {
 		log.Println("Bad Connection")
 		return "", false
 	}
 
-	val, err := rm.redisClient.Get(reviewId).Result()
+	key := util.GenKey(userId, reviewId)
+	val, err := rm.redisClient.Get(key).Result()
 	if err != nil {
 		log.Printf("Read frrm redis failed %v\n", err)
 		return "", false
@@ -63,19 +63,21 @@ func (rm *ReviewManager) UpdateReview(review *Review, newContent string) bool {
 	}
 
 	val := string(buf[:])
-	if err := rm.redisClient.Set(review.ReviewId, val, 0).Err(); err != nil {
+	key := util.GenKey(review.UserId, review.ReviewId)
+	if err := rm.redisClient.Set(key, val, 0).Err(); err != nil {
 		return false
 	}
 	return true
 }
 
 // Return true on success
-func (rm *ReviewManager) DeleteReview(reviewId string) bool {
+func (rm *ReviewManager) DeleteReview(userId string, reviewId string) bool {
 	if !rm.isOpen() {
 		return false
 	}
 
-	if err := rm.redisClient.Del(reviewId).Err(); err != nil {
+	key := util.GenKey(userId, reviewId)
+	if err := rm.redisClient.Del(key).Err(); err != nil {
 		log.Printf("Redis delete failed %v\n", err)
 		return false
 	}
@@ -103,7 +105,8 @@ func (rm *ReviewManager) CreateReview(userId string, item string, content string
 	// Use redis Pipeline
 	pipe := rm.redisClient.Pipeline()
 	// Add to review set
-	if err := pipe.Set(review.ReviewId, val, 0).Err(); err != nil {
+	key := util.GenKey(userId, review.ReviewId)
+	if err := pipe.Set(key, val, 0).Err(); err != nil {
 		log.Printf("Set error.")
 		return "", false
 	}
@@ -140,7 +143,7 @@ func (rm *ReviewManager) GetReviewByReviewId(userId string) ([]string, bool) {
 
 	var reviews []string
 	for _, id := range ids {
-		review, ok := rm.GetReview(id)
+		review, ok := rm.GetReview(userId, id)
 		if !ok {
 			log.Printf("Get reviews failed!")
 			return nil, false

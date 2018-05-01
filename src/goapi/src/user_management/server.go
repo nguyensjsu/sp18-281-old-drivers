@@ -7,10 +7,8 @@ import (
 	"log"
 	"net/http"
 	"strconv"
+	"util"
 )
-
-var redis_server_ip = "127.0.0.1"
-var redis_server_port int = 6379
 
 type UserServer struct {
 	um         *UserManager
@@ -18,10 +16,11 @@ type UserServer struct {
 }
 
 // NewServer configures and returns a Server.
-func NewServer() *UserServer {
+func NewServer(configFile string) *UserServer {
 	n := negroni.Classic()
+	addrs := util.GetAddrs(configFile)
 	UserServer := &UserServer{
-		um:         NewUserManager(redis_server_ip, redis_server_port),
+		um:         NewUserManager(addrs),
 		httpServer: n}
 	log.Println("Create UserServer")
 	return UserServer

@@ -39,12 +39,11 @@ Week5: (4/21/18-4/28/18)
                        all team members, and testing done for API parts for all team members.
                        Finish Kong configuration on AWS.
 
-    * Challenge: 
+    * Challenge: Implementation, Testing part on each API.
 ```
 ```
 Week6: (4/28/18-5/4/18)
-    * Weekly progress: 
-
+    * Weekly progress: Enhance GO API server, supporting data sharding, replication and consistency.
     * Challenge:
 ```
 
@@ -116,7 +115,7 @@ APIs
 * Create Order
 ```
 Method: POST
-/order?userid=xxx&items=xxx,yyy,zzz
+/users/{userid}/order?userid=xxx&items=xxx,yyy,zzz
 
 Response:
 Jsonized order structure
@@ -125,7 +124,7 @@ Jsonized order structure
 * Update Order
 ```
 Method: POST
-/order/{orderid}?add=xx,yy&delete=zz
+/users/{userid}/order/{orderid}?add=xx,yy&delete=zz
 
 Response:
 Jsonized order structure
@@ -134,7 +133,7 @@ Jsonized order structure
 * Delete Order
 ```
 Method: DELETE
-/order/{orderid}
+/users/{userid}/order/{orderid}
 
 Response:
 HTTP 204
@@ -143,7 +142,7 @@ HTTP 204
 * Get Order
 ```
 Method: GET
-/order/{orderid}
+/users/{userid}/order/{orderid}
 
 Response:
 Jsonized Order struct or 404 error code if not exist
@@ -152,7 +151,7 @@ Jsonized Order struct or 404 error code if not exist
 * Get user orders
 ```
 Method: GET
-/orders/{userid}
+/users/{userid}/orders
 
 Response:
 All orders belone to the user
@@ -280,7 +279,7 @@ type Review struct {
 ```
 Method 'POST'
 
-/review
+/users/{userid}/review?content=xxx
 
 Return:
 Jsonized review struct
@@ -290,7 +289,7 @@ Jsonized review struct
 ```
 Method 'GET'
 
-/review/{reviewid}
+/users/{userid}/review/{reviewid}
 
 Return:
 Jsonized review struct
@@ -300,7 +299,7 @@ Jsonized review struct
 ```
 Method 'POST'
 
-/review/{reviewid}
+/users/{userid}/review/{reviewid}
 
 Jsonized review struct
 ```
@@ -309,7 +308,7 @@ Jsonized review struct
 ```
 Method 'DELETE'
 
-/review/{reviewid}
+/users/{userid}/review/{reviewid}
 
 
 Return:
@@ -320,7 +319,7 @@ Status code 204.
 ```
 Method 'GET'
 
-/review
+/users/{userid}/reviews
 
 Response:
 All reviews belong to the user

@@ -7,10 +7,8 @@ import (
 	"log"
 	"net/http"
 	"strings"
+	"util"
 )
-
-var redis_server_ip = "127.0.0.1"
-var redis_server_port int = 6379
 
 type OrderServer struct {
 	om         *OrderManager
@@ -18,10 +16,11 @@ type OrderServer struct {
 }
 
 // NewServer configures and returns a Server.
-func NewServer() *OrderServer {
+func NewServer(configFile string) *OrderServer {
 	n := negroni.Classic()
+	addrs := util.GetAddrs(configFile)
 	orderServer := &OrderServer{
-		om:         NewOrderManager(redis_server_ip, redis_server_port),
+		om:         NewOrderManager(addrs),
 		httpServer: n}
 	log.Println("Create OrderServer")
 	return orderServer
@@ -39,17 +38,18 @@ func (os *OrderServer) Run() {
 }
 
 func (os *OrderServer) initRouteTable(mx *mux.Router) {
-	mx.HandleFunc("/order", os.createOrder).Methods("POST")
-	mx.HandleFunc("/order/{orderid}", os.getOrder).Methods("GET")
-	mx.HandleFunc("/order/{orderid}", os.updateOrder).Methods("POST")
-	mx.HandleFunc("/order/{orderid}", os.deleteOrder).Methods("DELETE")
-	mx.HandleFunc("/orders/{userid}", os.getOrderByUser).Methods("GET")
+	mx.HandleFunc("/users/{userid}/order", os.createOrder).Methods("POST")
+	mx.HandleFunc("/users/{userid}/order/{orderid}", os.getOrder).Methods("GET")
+	mx.HandleFunc("/users/{userid}/order/{orderid}", os.updateOrder).Methods("POST")
+	mx.HandleFunc("/users/{userid}/order/{orderid}", os.deleteOrder).Methods("DELETE")
+	mx.HandleFunc("/users/{userid}/orders", os.getOrderByUser).Methods("GET")
 }
 
 func (os *OrderServer) getOrder(w http.ResponseWriter, req *http.Request) {
 	params := mux.Vars(req)
+	userId := params["userid"]
 	orderId := params["orderid"]
-	val, ok := os.om.GetOrder(orderId)
+	val, ok := os.om.GetOrder(userId, orderId)
 	if !ok {
 		w.WriteHeader(http.StatusNotFound)
 		w.Write([]byte("Order not exist"))
@@ -61,10 +61,11 @@ func (os *OrderServer) getOrder(w http.ResponseWriter, req *http.Request) {
 }
 
 func (os *OrderServer) createOrder(w http.ResponseWriter, req *http.Request) {
-	userId := req.FormValue("userid")
+	params := mux.Vars(req)
+	userId := params["userid"]
 	if len(userId) == 0 {
 		w.WriteHeader(http.StatusBadRequest)
-		w.Write([]byte("Invalid parameter"))
+		w.Write([]byte("Missing UserId"))
 		return
 	}
 
@@ -82,9 +83,10 @@ func (os *OrderServer) createOrder(w http.ResponseWriter, req *http.Request) {
 
 func (os *OrderServer) updateOrder(w http.ResponseWriter, req *http.Request) {
 	params := mux.Vars(req)
+	userId := params["userid"]
 	orderId := params["orderid"]
 	var order Order
-	orderJson, ok := os.om.GetOrder(orderId)
+	orderJson, ok := os.om.GetOrder(userId, orderId)
 	if !ok {
 		w.WriteHeader(http.StatusBadRequest)
 		return
@@ -125,8 +127,9 @@ func (os *OrderServer) updateOrder(w http.ResponseWriter, req *http.Request) {
 
 func (os *OrderServer) deleteOrder(w http.ResponseWriter, req *http.Request) {
 	params := mux.Vars(req)
+	userId := params["userid"]
 	orderId := params["orderid"]
-	ok := os.om.DeleteOrder(orderId)
+	ok := os.om.DeleteOrder(userId, orderId)
 	if !ok {
 		w.WriteHeader(http.StatusBadRequest)
 		w.Write([]byte("Delete order failed"))

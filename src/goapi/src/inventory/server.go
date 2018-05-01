@@ -2,25 +2,24 @@ package main
 
 import (
 	"encoding/json"
-	"net/http"
-	"github.com/gorilla/mux"
 	"github.com/codegangsta/negroni"
+	"github.com/gorilla/mux"
 	"log"
+	"net/http"
 	"strconv"
+	"util"
 )
-
-var redis_server_ip = "127.0.0.1"
-var redis_server_port = 6379
 
 type InventoryServer struct {
 	im         *InventoryManager
 	httpServer *negroni.Negroni
 }
 
-func NewServer() *InventoryServer {
+func NewServer(configFile string) *InventoryServer {
 	n := negroni.Classic()
+	addrs := util.GetAddrs(configFile)
 	inventoryServer := &InventoryServer{
-		im:         NewInventoryManager(redis_server_ip, redis_server_port),
+		im:         NewInventoryManager(addrs),
 		httpServer: n}
 	log.Println("Create InventoryServer")
 	return inventoryServer
@@ -46,10 +45,9 @@ func (is *InventoryServer) initRouteTable(mx *mux.Router) {
 	mx.HandleFunc("/inventory/{inventoryid}", is.deleteInventoryHandler).Methods("DELETE")
 }
 
-
 /* API Get All Inventorys
 func (is *InventoryServer) getAllInventoryHandler(w http.ResponseWriter, r *http.Request) {
-	
+
 	var inventory Inventory
 	inventoryJson, ok := is.im.GetAllInventory()
 
@@ -91,17 +89,16 @@ func (is *InventoryServer) getInventoryHandler(w http.ResponseWriter, r *http.Re
 // API Add Inventory
 // curl -i -X POST "localhost:8080/inventory?name=latin&price=20&amount=100"
 func (is *InventoryServer) addInventoryHandler(w http.ResponseWriter, r *http.Request) {
-	
+
 	name := r.FormValue("name")
 	price, err1 := strconv.ParseFloat(r.FormValue("price"), 64)
 	amount, err2 := strconv.ParseInt(r.FormValue("amount"), 10, 64)
-
 
 	if name == "" || err1 != nil || err2 != nil {
 		w.WriteHeader(http.StatusBadRequest)
 		w.Write([]byte("Invalid parameters"))
 	}
-	
+
 	val, ok := is.im.CreateInventory(name, price, amount)
 	if !ok {
 		w.WriteHeader(http.StatusBadRequest)
@@ -112,11 +109,10 @@ func (is *InventoryServer) addInventoryHandler(w http.ResponseWriter, r *http.Re
 	}
 }
 
-
 // API Update Inventory
 // curl -i -X PUT "localhost:8080/inventory/7fc439c2-8dd0-4829-bb3c-64f88f03fc86?name=latin&price=20&amount=99"
 func (is *InventoryServer) updateInventoryHandler(w http.ResponseWriter, r *http.Request) {
-	
+
 	param := mux.Vars(r)
 	inventoryId := param["inventoryid"]
 
@@ -149,7 +145,7 @@ func (is *InventoryServer) updateInventoryHandler(w http.ResponseWriter, r *http
 // API Delete Inventory
 // curl -i -X DELETE "localhost:8080/inventory/dad0c14f-e0ae-4fa3-9a8c-29b9dad9347e"
 func (is *InventoryServer) deleteInventoryHandler(w http.ResponseWriter, r *http.Request) {
-	
+
 	param := mux.Vars(r)
 	inventoryId := param["inventoryid"]
 	ok := is.im.DeleteInventory(inventoryId)
@@ -162,6 +158,6 @@ func (is *InventoryServer) deleteInventoryHandler(w http.ResponseWriter, r *http
 		w.Write([]byte("Inventory delete successful"))
 	}
 
-	log.Printf("DELETE Inventory %v\n", ok)	
-	
+	log.Printf("DELETE Inventory %v\n", ok)
+
 }
