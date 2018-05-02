@@ -5,8 +5,8 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
-var dbConfig = require('./db');
-var mongoose = require('mongoose');
+// var dbConfig = require('./db');
+// var mongoose = require('mongoose');
 // Connect to DB
 mongoose.connect(dbConfig.url);
 

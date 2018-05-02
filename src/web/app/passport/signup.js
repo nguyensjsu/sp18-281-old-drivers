@@ -1,6 +1,7 @@
 var LocalStrategy   = require('passport-local').Strategy;
 var User = require('../models/user');
 var bCrypt = require('bcrypt-nodejs');
+var Request = require('request');
 
 module.exports = function(passport){
 
@@ -9,7 +10,21 @@ module.exports = function(passport){
         },
         function(req, name, password, done) {
 
+            name = req.body.name
+            phone = req.body.phone
+            balance = req.body.balance
 
+            Request.post('http://localhost:8080/user?name={name}&phone={phone}&balance={balance}', function(err, response, body) {
+                if (!error && response.statusCode == 200) {
+                    console.log(body) // Print the google web page.
+                }
+                console.dir(JSON.parse(body))
+
+                res.render('index', {})
+            })
+
+
+            /*
             Request.post({
                 "headers": { "content-type": "application/json" },
                 "url": "http://user/",
@@ -27,6 +42,8 @@ module.exports = function(passport){
                 });
 
             res.redirect('/login')
+            */
+
 
             /*
             findOrCreateUser = function(){

@@ -31,8 +31,9 @@ module.exports = function(passport){
                 } 
             ); */
 
+                // call get user api, bind response with home page
                 if (password = "1") {
-                    Request.get("http://localhost:8080/user/", (error, response, body) => {
+                    Request.get("http://localhost:8080/user/{userid}", (error, response, body) => {
                         if(error) {
                            return console.dir(error);
                         }
