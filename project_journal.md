@@ -115,7 +115,7 @@ APIs
 * Create Order
 ```
 Method: POST
-/users/{userid}/order?userid=xxx&items=xxx,yyy,zzz
+/users/{userid}/order?&items=xxx,yyy,zzz
 
 Response:
 Jsonized order structure
@@ -353,6 +353,7 @@ on some API, we use hash tag in Redis to make sure all the keys with the same ha
 pssh -l ec2-user -h ips -x "-i cmpe281-project.pem" "sudo yum -y update"
 pssh -l ec2-user -h ips -x "-i cmpe281-project.pem" "sudo yum -y install gcc"
 pssh -l ec2-user -h ips -x "-i cmpe281-project.pem" "sudo yum -y install make gcc gcc-c++ kernel-devel"
+pssh -l ec2-user -h ips -x "-i cmpe281-project.pem" "sudo yum -y install golang"
 
 # Install redis
 pssh -l ec2-user -h ips -x "-i cmpe281-project.pem" "wget http://download.redis.io/redis-stable.tar.gz"
@@ -414,8 +415,52 @@ kong migrations up [-c /path/to/kong.conf]
 kong start [-c /path/to/kong.conf]
 ```
 
-### 7. Implementation (04/20/2018)
+* Add Order API Routing
+```
+curl -i -X POST \
+    --url http://18.144.40.71:8001/apis/ \
+    --data 'name=order-api' \
+    --data 'uris=/order' \
+    --data 'strip_uri=true' \
+    --data 'upstream_url=http://52.53.251.248:8080'
+```
 
+* Add User API Routing
+```
+curl -i -X POST \
+    --url http://18.144.40.71:8001/apis/ \
+    --data 'name=user-api' \
+    --data 'uris=/user' \
+    --data 'strip_uri=true' \
+    --data 'upstream_url=http://{XXX}:8080'
+```
+
+* Add Inventory API Routing
+```
+curl -i -X POST \
+    --url http://18.144.40.71:8001/apis/ \
+    --data 'name=inventory-api' \
+    --data 'uris=/inventory' \
+    --data 'strip_uri=true' \
+    --data 'upstream_url=http://{XXX}:8080'
+```
+
+* Add Review API Routing
+```
+curl -i -X POST \
+    --url http://18.144.40.71:8001/apis/ \
+    --data 'name=review-api' \
+    --data 'uris=/review' \
+    --data 'strip_uri=true' \
+    --data 'upstream_url=http://{XXX}:8080'
+```
+
+### 7. Deploy API Server (04/20/2018)
+```
+On 52.53.251.248
+git clone https://github.com/nguyensjsu/team281-old-drivers.git
+
+```
 
 ### 8. Summary
 ---
