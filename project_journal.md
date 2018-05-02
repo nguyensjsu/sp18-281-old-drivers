@@ -325,20 +325,76 @@ Response:
 All reviews belong to the user
 ```
 
-
-#### 3.8 Error Handling (04/18/2018)
+### 4. AWS Configuration (01/05/2018)
 ---
+* Create Instance
+Each module will do the same operations.
+```
+Create 6 instances on AWS EC2 with designated VPC (vpc-7efd6019). Two of them in on subnet (subnet-19314642), another four in subnet (subnet-f7c59e90).
+```
 
-### 4. System APIs (04/19/2018)
+* Create Network ACL
+```
+The ACL rules for subnet-19314642 allow all the network protocols except two ports 6379 on TCP. This is because 
+redis servers use the port to communicate with each other through TCP. After 
+applying the ACL rules, subnet-19314642 will act as been partitionned, because redis nodes in subnet1 can only communicate 
+with each other but can't talk to nodes in other subnets.
+```
+The purpose of creating customized network ACL and subnets is for simulating network partition. This process can verify our system's capability to handle network partition, and demonstrate the advantage of our sharding solution, that is even part of data is unavailable, our system can still work properly for the rest of the dataset.
+
+### 5. Redis Configuration (04/19/2018)
 ---
+We will create [Redis cluster](https://redis.io/topics/cluster-tutorial) for our service. Each module has its own redis cluster. For each cluster, the key space is split into 16384 hash slots. So data is sharded on the 16384 slots according to the key value. To ensure the transactional operation
+on some API, we use hash tag in Redis to make sure all the keys with the same hash tag are dispatched to the same slot.
 
-### 5. Kong Configuration (04/26/2018)
+* Initialization
+```
+# ips is a file with all the instances ip addresses
+pssh -l ec2-user -h ips -x "-i cmpe281-project.pem" "sudo yum -y update"
+pssh -l ec2-user -h ips -x "-i cmpe281-project.pem" "sudo yum -y install gcc"
+pssh -l ec2-user -h ips -x "-i cmpe281-project.pem" "sudo yum -y install make gcc gcc-c++ kernel-devel"
+
+# Install redis
+pssh -l ec2-user -h ips -x "-i cmpe281-project.pem" "wget http://download.redis.io/redis-stable.tar.gz"
+pssh -l ec2-user -h ips -x "-i cmpe281-project.pem" "tar -xzvf redis-stable.tar.gz"
+pssh -l ec2-user -h ips -x "-i cmpe281-project.pem" "cd ~/redis-stable && make distclean"
+pssh -l ec2-user -h ips -x "-i cmpe281-project.pem" "cd ~/redis-stable && sudo make && sudo make install"
+```
+
+* Redis configuration
+```
+protected-mode no
+cluster-enabled yes
+cluster-config-file nodes.conf
+cluster-node-timeout 5000
+appendonly yes
+```
+
+* Start Redis
+```
+./redis-server redis.conf
+```
+
+* Config Cluster Mode
+The command used here is create, since we want to create a new cluster. The option --replicas 1 means that we want a slave for every master created. The other arguments are the list of addresses of the instances I want to use to create the new cluster.
+```
+gem install redis
+./redis-trib.rb create --replicas 1 18.144.40.71:6379 52.53.251.248:6379 52.53.182.123:6379 18.144.73.22:6379 54.183.35.190:6379 54.183.41.186:6379
+```
+
+### 6. Kong Configuration (04/26/2018)
 ---
 In this project, we use [Kong](https://getkong.org/about/) as our API gateway to route our API to different API servers.
 We adopt Kong + PostgresSQL mode. PostgresSQL is deployed from DockerCloud, and Kong is deployed on AWS EC2 instance. In
 Kong, we need to change few configs to make it talk to backend DB.
 ```
+On 18.144.40.71
+wget https://bintray.com/kong/kong-community-edition-aws/download_file?file_path=dists/kong-community-edition-0.13.1.aws.rpm
+sudo yum install epel-release
+sudo yum install kong-community-edition-0.13.1.aws.rpm --nogpgcheck
+
 admin_listen = 0.0.0.0:8001, 0.0.0.0:8444 ssl  # Open to all foreign connections
+change prefix to /home/ec2-user/kong
 pg_host = <ec2 public IP>             # The PostgreSQL host to connect to.
 pg_port = 5432                        # The port to connect to.
 pg_user = kong                        # The username to authenticate if required.
@@ -348,6 +404,8 @@ pg_database = kong                    # The database name to connect to.
 
 For PostgresSQL, we need to setup Kong user and database
 ```
+On instance 54.183.192.182
+psql -U postgres
 CREATE USER kong; CREATE DATABASE kong OWNER kong;
 ```
 
@@ -355,9 +413,6 @@ CREATE USER kong; CREATE DATABASE kong OWNER kong;
 kong migrations up [-c /path/to/kong.conf]
 kong start [-c /path/to/kong.conf]
 ```
-
-### 6. Redis Configuration (04/19/2018)
----
 
 ### 7. Implementation (04/20/2018)
 
