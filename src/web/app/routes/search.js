@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-var Place = require('../models/place');
+//var Place = require('../models/place');
 
 
 router.post('/search', function(req, res) {
