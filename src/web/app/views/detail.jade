@@ -6,7 +6,7 @@ html(lang='en')
         meta(name='description', content='')
         meta(name='author', content='')
         link(rel='icon', href='../../favicon.ico')
-        title Tour Guide for Spartans
+        title Coffee Shop
         // Bootstrap core CSS
         link(rel='stylesheet', href='https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css', integrity='sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ', crossorigin='anonymous')
         // jQuery ui CSS
@@ -38,12 +38,17 @@ html(lang='en')
                 ul.navbar-nav.mr-auto
                     li.nav-item.active
                         a.nav-link(href='/') Home
-                    li.nav-item.active
+                    li.nav-item
                         a.nav-link(href='/product') Product
                     li.nav-item
                         a.nav-link(href='/about') About
                     li.nav-item
                         a.nav-link(href='/contact') Contact
+                    li.nav-item
+                        a.nav-link(href='/order') Order
+                    li.nav-item
+                        a.nav-link(href='/review') Review
+
                 form.form-inline.mt-2.mt-md-0
                     .ui-widget
                         input#tags.form-control.mr-sm-2(type='text', placeholder='Search')
@@ -51,7 +56,7 @@ html(lang='en')
                 ul.navbar-nav.justify-content-end
                     li.nav-item
                         if user
-                            a.nav-link(href='/home') Hello, #{}!
+                            a.nav-link(href='/home') Hello, !
                         else
                             a.nav-link(href='/login') Join Us
 
@@ -60,62 +65,40 @@ html(lang='en')
             .row
                 .col-1
                 .col-10
-                    h2 #{inventory.InventoryName}
+                    h2 inventory.InventoryName
                     hr
 
 
             .row.justify-content-center
                 .col-5
                     h4 Price
-                    p $ #{inventory.InventoryPrice}
+                    p $ inventory.InventoryPrice
 
                     hr
 
                     
                     h4 Inventory
-                    <!--
-                    i.fa.fa-external-link(aria-hidden='true')
-                    a(href='#{items.website}') Website
-                    br
-                    i.fa.fa-phone(aria-hidden='true') 
-                    -->
-                    |   #{inventory.Amount}
+        
+                    p inventory.Amount
 
                     hr
 
-                    button.btn.btn-primary.btn-sm(type='button', onclick='/addOrder') Buy
+                    button.btn.btn-primary.btn-lg.float-left(type='button', onclick='/addOrder') Buy
                     
-                    <!--
-                    h4 Nearby Places
-                    for scene in items.scenes
-                        i.fa.fa-external-link(aria-hidden='true')
-                        a(href='#{scene.url}') #{scene.name}
-                        br
-                    -->
+                
 
                 .col-5#pics
                     iframe(width='100%', height='450px', frameborder='0', style='border:0', 
                     src='https://static1.squarespace.com/static/580fef93414fb5635ebb4c10/5a61310464b05fc422c84c62/5a8b4a4274b76c546716ff78/1519077962347/')
 
 
-                <!--
-                .col-5#map
-                    iframe(width='100%', height='450px', frameborder='0', style='border:0', src='https://www.google.com/maps/embed/v1/place?key=AIzaSyD24HTaCZNl759ZbQduQKfitIi2hOCAULw&q=#{items.name}', allowfullscreen)
-                -->
+                
 
         hr
 
-        <!--
-        .container#slide
-            .map.map-1(style="background-image:url('#{items.images[0]}')")
-            .map.map-2(style="background-image:url('#{items.images[1]}')")
-            .map.map-3(style="background-image:url('#{items.images[2]}')")
+        
 
-
-        hr
-        -->
-
-        .row.justify-content-center
+        //.row.justify-content-center
             .col-md-8.comments
 
                 if user
@@ -136,15 +119,15 @@ html(lang='en')
 
                 .float-right
 
-                // for review in items.reviews
+                for review in items.reviews
                 
                 .comment-wrap
                     .photo
                         img.avatar(style="background-image: url('https://s3.amazonaws.com/uifaces/faces/twitter/dancounsell/128.jpg')")
                     .comment-block
-                        p.comment-text #{review.Content}
+                        p.comment-text Very Good
                         .bottom-comment
-                            .comment-date #{review.Date}
+                            .comment-date 2018
                             
         hr
 
@@ -161,7 +144,7 @@ html(lang='en')
                     li.list-inline-item
                         a.social-link.rounded-circle.text-white(href='https://www.github.com')
                             i.fa.fa-github(aria-hidden='true')
-                p.text-muted.small.mb-0 Copyright © Team 404
+                p.text-muted.small.mb-0 Copyright © Old Drivers
 
 
 

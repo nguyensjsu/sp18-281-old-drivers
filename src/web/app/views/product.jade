@@ -38,7 +38,7 @@ html(lang='en')
                 ul.navbar-nav.justify-content-end
                     li.nav-item
                         if user
-                            a.nav-link(href='/home') Hello, #{user.}!
+                            a.nav-link(href='/home') Hello, #{user.UserName}!
                         else
                             a.nav-link(href='/login') Join Us
 
@@ -50,48 +50,6 @@ html(lang='en')
             h3.mb-5
               em What we have
           .overlay
-
-
-        <!--
-        // Services
-        section#services.content-section.bg-primary.text-white.text-center
-          .container
-            .content-section-heading
-              h3.text-secondary.mb-0 Services
-              h2.mb-5 Explore The City
-            .row
-              .col-lg-3.col-md-6.mb-5.mb-lg-0
-                span.service-icon.rounded-circle.mx-auto.mb-3
-                    i.fa.fa-cutlery.fa-3x(aria-hidden='true')
-                h4
-                  strong Restaurant
-                a(href='#{inventorys.InventoryName}')
-                    p.text-faded.mb-0 Looking for great local food!
-              .col-lg-3.col-md-6.mb-5.mb-lg-0
-                span.service-icon.rounded-circle.mx-auto.mb-3
-                    i.fa.fa-taxi.fa-3x(aria-hidden='true')
-                h4
-                  strong Transportation
-                a(href='#{inventorys.InventoryName}')
-                    p.text-faded.mb-0 Get around in the city
-              .col-lg-3.col-md-6.mb-5.mb-md-0
-                span.service-icon.rounded-circle.mx-auto.mb-3
-                    i.fa.fa-university.fa-3x(aria-hidden='true')
-                h4
-                  strong Government
-                a(href='#{inventorys.Amount}')
-                    p.text-faded.mb-0
-                    | We&nbsp;
-                    i.fa.fa-heart
-                    | &nbsp;to help
-              .col-lg-3.col-md-6
-                span.service-icon.rounded-circle.mx-auto.mb-3
-                    i.fa.fa-thermometer-empty.fa-3x(aria-hidden='true')
-                h4
-                  strong Weather
-                a(href='#{inventorys.InventoryName}')
-                    p.text-faded.mb-0 Stay with comfort
-        -->
 
 
 

@@ -7,102 +7,103 @@ var Request = require("request");
 
 router.get('/about', function(req, res, next) {
 
-    Request.get("http://localhost:8080/inventory/3b0fa0dc-6e35-4cb4-bd6f-cfaf71ef9c13", (error, response, body) => {
-        if(error) {
-           return console.dir(error);
-        }
-        console.dir(JSON.parse(body));
-
-        result = JSON.parse(body)
-
-        res.render('about',{inventory: result});
-    });
+        res.render('about',{});
 
 });
 
 
 router.get('/product', function(req, res, next) {
 
-    Request.get("http://localhost:8080/inventory/", (error, response, body) => {
+    var latte, americano, mocha, cappuccino
+
+    // latte
+    Request.get("http://18.144.40.71:8000/inventory/inventory/96d8492a-802f-4f0a-9b04-f82ef5a16e2f", (error, response, body) => {
         if(error) {
            return console.dir(error);
         }
         console.dir(JSON.parse(body));
 
-        result = JSON.parse(body)
+        latte = JSON.parse(body)
 
-        res.render('product',{americano: result});
+        
     });
 
-    Request.get("http://localhost:8080/inventory/", (error, response, body) => {
+    // americano
+    Request.get("http://18.144.40.71:8000/inventory/inventory/5d85f3eb-8576-44e3-b075-bc28129cbd8f", (error, response, body) => {
         if(error) {
            return console.dir(error);
         }
         console.dir(JSON.parse(body));
 
-        result = JSON.parse(body)
+        americano = JSON.parse(body)
 
-        res.render('product',{latte: result});
     });
 
-    Request.get("http://localhost:8080/inventory/", (error, response, body) => {
+    // mocha
+    Request.get("http://18.144.40.71:8000/inventory/inventory/5feecca7-bbd5-494e-be2a-1ca4bd469d4e", (error, response, body) => {
         if(error) {
            return console.dir(error);
         }
         console.dir(JSON.parse(body));
 
-        result = JSON.parse(body)
+        mocha = JSON.parse(body)
 
-        res.render('product',{mocha: result});
     });
 
-    Request.get("http://localhost:8080/inventory/", (error, response, body) => {
+    // cappuccino
+    Request.get("http://18.144.40.71:8000/inventory/inventory/f3ef10b1-b937-458b-9ee2-5a90b1ca0936 ", (error, response, body) => {
         if(error) {
            return console.dir(error);
         }
         console.dir(JSON.parse(body));
 
-        result = JSON.parse(body)
+        cappuccino = JSON.parse(body)
 
-        res.render('product',{cappuccino: result});
     });
+
+    res.render('product', {latte: latte, americano: americano, mocha: mocha, cappuccino: cappuccino})
 
 });
 
 
 router.get('/americano', function(req, res, next) {
 
-    Request.get("http://localhost:8080/inventory/", (error, response, body) => {
-        if(error) {
-           return console.dir(error);
+    /*
+    Request.get("http://18.144.40.71:8000/inventory/inventory/5d85f3eb-8576-44e3-b075-bc28129cbd8f", function (error, response, body) {
+        if(body == "Inventory not exist") {
+           return console.dir("error");
         }
         console.dir(JSON.parse(body));
 
-        result = JSON.parse(body)
+        result = JSON.parse(body)*/
 
-        res.render('detail',{americano: result});
-    });
+        res.render('detail',{});
+      
+    //});
 
 });
 
+
+
+
 router.get('/latte', function(req, res, next) {
 
-    Request.get("http://localhost:8080/inventory/", (error, response, body) => {
+    Request.get("http://18.144.40.71:8000/inventory/inventory/96d8492a-802f-4f0a-9b04-f82ef5a16e2f", function (error, response, body) {
         if(error) {
            return console.dir(error);
         }
-        console.dir(JSON.parse(body));
+        // console.dir(JSON.parse(body));
 
-        result = JSON.parse(body)
+        // result = JSON.parse(body)
 
-        res.render('detail',{latte: result});
+        res.render('detail',{inventory: body});
     });
 
 });
 
 router.get('/mocha', function(req, res, next) {
 
-    Request.get("http://localhost:8080/inventory/", (error, response, body) => {
+    Request.get("http://18.144.40.71:8000/inventory/inventory/5feecca7-bbd5-494e-be2a-1ca4bd469d4e", function (error, response, body) {
         if(error) {
            return console.dir(error);
         }
@@ -110,14 +111,14 @@ router.get('/mocha', function(req, res, next) {
 
         result = JSON.parse(body)
 
-        res.render('detail',{mocha: result});
+        res.render('detail',{inventory: result});
     });
 
 });
 
 router.get('/cappuccino', function(req, res, next) {
 
-    Request.get("http://localhost:8080/inventory/", (error, response, body) => {
+    Request.get("http://18.144.40.71:8000/inventory/inventory/f3ef10b1-b937-458b-9ee2-5a90b1ca0936", function (error, response, body) {
         if(error) {
            return console.dir(error);
         }
@@ -125,7 +126,7 @@ router.get('/cappuccino', function(req, res, next) {
 
         result = JSON.parse(body)
 
-        res.render('detail',{cappuccino: result});
+        res.render('detail',{inventory: result});
     });
 
 });

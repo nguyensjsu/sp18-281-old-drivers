@@ -52,6 +52,8 @@ html(lang='en')
                         a.nav-link(href='/contact') Contact
                     li.nav-item
                         a.nav-link(href='/order') Order
+                    li.nav-item
+                        a.nav-link(href='/review') Review
 
 
                 form.form-inline.mt-2.mt-md-0(action='/search', method='post')
@@ -63,7 +65,7 @@ html(lang='en')
                 ul.navbar-nav.justify-content-end
                     li.nav-item
                     if user
-                        a.nav-link(href='/home') Hello, #{user.UserName}!
+                        a.nav-link(href='/home') Hello, !
                     else
                         a.nav-link(href='/login') Join Us
 
@@ -112,9 +114,9 @@ html(lang='en')
 
 
 
-        <!--
+        
         // Card component
-        .row.align-self-center.justify-content-center
+        //.row.align-self-center.justify-content-center
             .col-sm-3
                 .card
                     img.card-img-top(src='images/disney-logo.jpg', alt='Card image cap', width='100%', height='200')
@@ -149,11 +151,11 @@ html(lang='en')
                             | near Fisherman's Wharf, San Francisco. Hornblower Cruises and Events, operating under the
                             | name Alcatraz Cruises, is the official ferry provider to and from the island.
                         a.btn.btn-primary(href='/alcatraz') Details 
-        -->
+        
 
-        <!--
+        
 
-        hr.featurette-divider
+        //hr.featurette-divider
 
         .row.featurette
             .col-md-1
@@ -191,17 +193,17 @@ html(lang='en')
 
         hr.featurette-divider
 
-        -->
+        
 
         // Footer
         footer.footer.text-center
             .container
                 ul.list-inline.mb-5
                     li.list-inline-item
-                        a.social-link.rounded-circle.text-white.mr-3(href='https://www.facebook.com/TourGuide-132179940786791/')
+                        a.social-link.rounded-circle.text-white.mr-3(href='https://www.facebook.com')
                             i.fa.fa-facebook(aria-hidden='true')
                     li.list-inline-item
-                        a.social-link.rounded-circle.text-white.mr-3(href='https://twitter.com/TourGuide_280')
+                        a.social-link.rounded-circle.text-white.mr-3(href='https://twitter.com')
                             i.fa.fa-twitter(aria-hidden='true')
                     li.list-inline-item
                         a.social-link.rounded-circle.text-white(href='https://www.github.com')

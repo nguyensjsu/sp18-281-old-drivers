@@ -74,6 +74,39 @@ html(lang='en')
 
 
 
+        .row.justify-content-center
+            .col-md-8.comments
+
+                //if user
+                .comment-wrap
+                    .photo
+                        .avatar(style="background-image: url('https://s3.amazonaws.com/uifaces/faces/twitter/dancounsell/128.jpg')")
+                    .comment-block
+                        form(action='/insert' method='post')
+                            input(name='place', value='', type='hidden')
+                            textarea(name='content', id='textarea1' cols='30', rows='3', placeholder='Add review...')
+                            button.btn.icon-btn.btn-primary(type='submit')
+                                i.fa.fa-share-square-o(aria-hidden='true')
+                                span.img-circle.text-info
+                                | Share
+
+                // else
+
+
+                .float-right
+
+                // for review in items.reviews
+                
+                .comment-wrap
+                    .photo
+                        img.avatar(style="background-image: url('https://s3.amazonaws.com/uifaces/faces/twitter/dancounsell/128.jpg')")
+                    .comment-block
+                        p.comment-text Very Good
+                        .bottom-comment
+                            .comment-date 2018
+
+
+
         header.masthead.d-flex
             .container.text-center.my-auto
                 h1.mb-1 Old Drivers
