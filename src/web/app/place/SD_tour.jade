@@ -1,0 +1,23 @@
+doctype html
+html(lang='en')
+    head
+        meta(charset='UTF-8')
+        title Title
+        link(href='css/place.css', rel='stylesheet', type='text/css')
+        script.
+            $( function() {
+                $( "#datepicker" ).datepicker({
+                    minDate : 0
+                });
+            } );
+    body
+        img.im(src='images/place/SD_zoo.jpg', width='300', height='450')
+        p
+            | When do you plan to start your EXCITING San Diego trip!:
+            input#datepicker(type='text')
+        p
+            | Founded in 1916, the Zoo has been an icon in San Diego for nearly 100 years—and an absolute must-see in Southern California. Spend the day monkeying around in our tropical oasis as you visit beautiful habitats that are home to gorillas, eagles, tigers, sun bears, Asian leopards, rare reptiles, a palette of colorful birds, and more.
+        p
+            | Visit the Australian Outback to delight in our colony of 24 koalas, and travel along Panda Trek to experience giant pandas and other animals that share their bamboo forest habitat. Go back in time through Elephant Odyssey to discover what animals used to roam Southern California and see what the elephants are up to.
+        p
+            | Enjoy a guided tour on a double-decker bus or the scenic view from the Skyfari aerial tram, and dine in the peaceful surroundings of Albert's Restaurant. Discover the wonders of wildlife with animal encounters, interactive experiences, and keeper chats. A leader in animal care and conservation, the San Diego Zoo is at the heart of the San Diego experience.

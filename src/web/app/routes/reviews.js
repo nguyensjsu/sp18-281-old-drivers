@@ -1,85 +1,46 @@
 var express = require('express');
 var router = express.Router();
-// var UserReview = require('../models/review');
+var UserReview = require('../models/review');
 
 
 router.get('/display', function(req, res, next) {
 
-    Request.get("http://localhost:8080/review/", (error, response, body) => {
-        if(error) {
-           return console.dir(error);
-        }
-        console.dir(JSON.parse(body));
-
-        result = JSON.parse(body)
-
-        res.render('detail',{review: result});
+    UserReview.find({}, function(err, doc){
+        res.render('display', {items: doc, user:req.user});
     });
-
-
-})
-
+});
 
 router.post('/insert', function(req, res, next) {
+  var item = {
+    name: req.body.name,
+    content: req.body.content
+  };
 
-    Request.post({
-        "headers": { "content-type": "application/json" },
-        "url": "http://review/",
-        "body": JSON.stringify({
-            "content": req.body.content,
-            "date": date.Now()
-        })
-    }, (error, response, body) => {
-        if(error) {
-            return console.dir(error);
-        }
-        console.dir(JSON.parse(body));
+  var data = new UserReview(item);
+  data.save();
 
+  res.redirect('/display');
+});
 
-    });
+router.post('/update', function(req, res, next) {
+  var id = req.body.id;
 
-    res.redirect('/display')
+  UserReview.findById(id, function(err, doc) {
+    if (err) {
+      console.error('error, no entry found');
+    }
+    doc.name = req.body.name;
+    doc.content = req.body.content;
+    doc.save();
+  });
+  res.redirect('/display');
+});
 
-
-})
-
-
-// not functional
-router.get('/update', function(req, res, next) {
-
-    Request.get("http://localhost:8080/review/", (error, response, body) => {
-        if(error) {
-           return console.dir(error);
-        }
-        console.dir(JSON.parse(body));
-
-        result = JSON.parse(body)
-
-        res.render('detail',{review: result});
-    });
-
-
-})
-
-
-// not functional
-router.get('/delete', function(req, res, next) {
-
-    Request.get("http://localhost:8080/review/", (error, response, body) => {
-        if(error) {
-           return console.dir(error);
-        }
-        console.dir(JSON.parse(body));
-
-        result = JSON.parse(body)
-
-        res.render('detail',{review: result});
-    });
-
-
-})
-
-
-
+router.post('/delete', function(req, res, next) {
+    //console.log(JSON.stringify(req));
+    var id = req.body.id;
+    UserReview.findByIdAndRemove(id).exec();
+    res.redirect('/display');
+});
 
 module.exports = router;

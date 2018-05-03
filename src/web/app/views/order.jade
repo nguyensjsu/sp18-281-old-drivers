@@ -45,9 +45,10 @@ html(lang='en')
                     li.nav-item
                         a.nav-link(href='/contact') Contact
                     li.nav-item
-                        a.nav-link(href='/order') Order
-                    li.nav-item
-                        a.nav-link(href='/review') Review
+                        if user
+                            a.nav-link(href='/order') Order
+                        else
+                            a.nav-link(href='/') 
 
                 form.form-inline.mt-2.mt-md-0
                     .ui-widget
@@ -56,79 +57,28 @@ html(lang='en')
                 ul.navbar-nav.justify-content-end
                     li.nav-item
                         if user
-                            a.nav-link(href='/home') Hello, !
+                            a.nav-link(href='/home') Hello, #{user.firstName}!
                         else
                             a.nav-link(href='/login') Join Us
 
 
-        .container-fluid
-            .row
-                .col-1
-                .col-10
-                    h2 inventory.InventoryName
-                    hr
-
-
-            .row.justify-content-center
-                .col-5
-                    h4 Price
-                    p $ inventory.InventoryPrice
-
-                    hr
-
-                    
-                    h4 Inventory
-        
-                    p inventory.Amount
-
-                    hr
-
-                    button.btn.btn-primary.btn-lg.float-left(type='button', onclick='/addOrder') Buy
-                    
-                
-
-                .col-5#pics
-                    iframe(width='100%', height='450px', frameborder='0', style='border:0', 
-                    src='https://static1.squarespace.com/static/580fef93414fb5635ebb4c10/5a61310464b05fc422c84c62/5a8b4a4274b76c546716ff78/1519077962347/')
-
-
-                
-
         hr
 
-        
-
-        //.row.justify-content-center
+        .row.justify-content-center
             .col-md-8.comments
-
-                if user
-                    .comment-wrap
-                        .photo
-                            .avatar(style="background-image: url('https://s3.amazonaws.com/uifaces/faces/twitter/dancounsell/128.jpg')")
-                        .comment-block
-                            form(action='/insert' method='post')
-                                input(name='place', value='', type='hidden')
-                                textarea(name='content', id='textarea1' cols='30', rows='3', placeholder='Add review...')
-                                button.btn.icon-btn.btn-primary(type='submit')
-                                    i.fa.fa-share-square-o(aria-hidden='true')
-                                    span.img-circle.text-info
-                                    | Share
-
-                else
-
-
                 .float-right
 
-                for review in items.reviews
-                
+                //for review in items.reviews
                 .comment-wrap
                     .photo
                         img.avatar(style="background-image: url('https://s3.amazonaws.com/uifaces/faces/twitter/dancounsell/128.jpg')")
-                    .comment-block
-                        p.comment-text Very Good
+                    .comment-block Order detail
+                        p.comment-text 
+                        p.comment-text Americano 
+                        p $ 20
                         .bottom-comment
-                            .comment-date 2018
-                            
+                            .comment-date #{time}
+
         hr
 
         // Footer
@@ -144,7 +94,7 @@ html(lang='en')
                     li.list-inline-item
                         a.social-link.rounded-circle.text-white(href='https://www.github.com')
                             i.fa.fa-github(aria-hidden='true')
-                p.text-muted.small.mb-0 Copyright © Old Drivers
+                p.text-muted.small.mb-0 Copyright © Team 404
 
 
 

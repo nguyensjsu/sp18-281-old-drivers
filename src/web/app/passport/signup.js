@@ -1,51 +1,14 @@
 var LocalStrategy   = require('passport-local').Strategy;
-// var User = require('../models/user');
+var User = require('../models/user');
 var bCrypt = require('bcrypt-nodejs');
-var Request = require('request');
 
 module.exports = function(passport){
 
 	passport.use('signup', new LocalStrategy({
             passReqToCallback : true // allows us to pass back the entire request to the callback
         },
-        function(req, name, password, done) {
+        function(req, username, password, done) {
 
-            name = req.body.name
-            phone = req.body.phone
-            balance = req.body.balance
-
-            Request.post('http://localhost:8080/user?name={name}&phone={phone}&balance={balance}', function(err, response, body) {
-                if (!error && response.statusCode == 200) {
-                    console.log(body) // Print the google web page.
-                }
-                console.dir(JSON.parse(body))
-
-                res.render('index', {})
-            })
-
-
-            /*
-            Request.post({
-                "headers": { "content-type": "application/json" },
-                "url": "http://user/",
-                "body": JSON.stringify({
-                    "Name": req.body.name,
-                    "Phone": req.body.phone
-                    "Balance": req.body.balance
-                })}, (error, response, body) => {
-                if(error) {
-                    return console.dir(error);
-                }
-                console.dir(JSON.parse(body));
-
-
-                });
-
-            res.redirect('/login')
-            */
-
-
-            /*
             findOrCreateUser = function(){
                 // find a user in Mongo with provided username
                 User.findOne({ 'username' :  username }, function(err, user) {
@@ -81,16 +44,16 @@ module.exports = function(passport){
                         });
                     }
                 });
-            };*/
+            };
             // Delay the execution of findOrCreateUser and execute the method
             // in the next tick of the event loop
-            // process.nextTick(findOrCreateUser);
+            process.nextTick(findOrCreateUser);
         })
     );
 
-    /* Generates hash using bCrypt
+    // Generates hash using bCrypt
     var createHash = function(password){
         return bCrypt.hashSync(password, bCrypt.genSaltSync(10), null);
-    }*/
+    }
 
 }

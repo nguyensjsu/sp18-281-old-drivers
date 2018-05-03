@@ -5,12 +5,13 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
-// var dbConfig = require('./db');
-// var mongoose = require('mongoose');
+var dbConfig = require('./db');
+var mongoose = require('mongoose');
 // Connect to DB
-// mongoose.connect(dbConfig.url);
+mongoose.connect(dbConfig.url);
 
 var reviews = require('./routes/reviews');
+var routes = require('./routes/index');
 var places = require('./routes/places');
 var searchs = require('./routes/search');
 var app = express();
@@ -46,7 +47,7 @@ var initPassport = require('./passport/init');
 initPassport(passport);
 
 var users = require('./routes/users')(passport);
-// app.use('/', routes);
+app.use('/', routes);
 app.use('/', reviews);
 app.use('/', users);
 app.use('/', places);

@@ -5,7 +5,7 @@ html(lang='en')
         meta(name='viewport', content='width=device-width, initial-scale=1, shrink-to-fit=no')
         meta(name='description', content='')
         meta(name='author', content='')
-        title Tour Guide for Spartans
+        title Coffee Shop
         // Custom Fonts
         script(src='https://use.fontawesome.com/f9b22d3044.js')
 
@@ -31,6 +31,12 @@ html(lang='en')
                         a.nav-link(href='/about') About
                     li.nav-item
                         a.nav-link(href='/contact') Contact
+                    li.nav-item
+                        if user
+                            a.nav-link(href='/order') Order
+                        else
+                            a.nav-link(href='/') 
+                            
                 form.form-inline.mt-2.mt-md-0
                     .ui-widget
                         input#tags.form-control.mr-sm-2(type='text', placeholder='Search')
@@ -38,19 +44,56 @@ html(lang='en')
                 ul.navbar-nav.justify-content-end
                     li.nav-item
                         if user
-                            a.nav-link(href='/home') Hello, #{user.UserName}!
+                            a.nav-link(href='/home') Hello, #{user.firstName}!
                         else
                             a.nav-link(href='/login') Join Us
 
-        
         // Header
         header.masthead.d-flex
           .container.text-center.my-auto
-            h1.mb-1 Coffee
+            h1.mb-1 #{items.name}
             h3.mb-5
-              em What we have
+              em #{items.description}
           .overlay
 
+        // Services
+        section#services.content-section.bg-primary.text-white.text-center
+          .container
+            .content-section-heading
+              h3.text-secondary.mb-0 Services
+              h2.mb-5 Explore The City
+            .row
+              .col-lg-3.col-md-6.mb-5.mb-lg-0
+                span.service-icon.rounded-circle.mx-auto.mb-3
+                    i.fa.fa-cutlery.fa-3x(aria-hidden='true')
+                h4
+                  strong Restaurant
+                a(href='#{items.website[0]}')
+                    p.text-faded.mb-0 Looking for great local food!
+              .col-lg-3.col-md-6.mb-5.mb-lg-0
+                span.service-icon.rounded-circle.mx-auto.mb-3
+                    i.fa.fa-taxi.fa-3x(aria-hidden='true')
+                h4
+                  strong Transportation
+                a(href='#{items.website[1]}')
+                    p.text-faded.mb-0 Get around in the city
+              .col-lg-3.col-md-6.mb-5.mb-md-0
+                span.service-icon.rounded-circle.mx-auto.mb-3
+                    i.fa.fa-university.fa-3x(aria-hidden='true')
+                h4
+                  strong Government
+                a(href='#{items.website[2]}')
+                    p.text-faded.mb-0
+                    | We&nbsp;
+                    i.fa.fa-heart
+                    | &nbsp;to help
+              .col-lg-3.col-md-6
+                span.service-icon.rounded-circle.mx-auto.mb-3
+                    i.fa.fa-thermometer-empty.fa-3x(aria-hidden='true')
+                h4
+                  strong Weather
+                a(href='#{items.website[3]}')
+                    p.text-faded.mb-0 Stay with comfort
 
 
         // Portfolio
@@ -58,67 +101,67 @@ html(lang='en')
             .container
                 .content-section-heading.text-center
                     h3.text-secondary.mb-0 CITY
-                    h2.mb-5 Our Product
+                    h2.mb-5 We we offer
                 .row.no-gutters
                     .col-lg-6
-                        a.portfolio-item(href='/americano')
+                        a.portfolio-item(href='#{items.scenes[0].url}')
                             span.caption
                                 span.caption-content
-                                    h2 #{americano.InventoryName}
+                                    h2 #{items.scenes[0].name}
                                     p.mb-0
-                            img.img-fluid(src='https://cdn.shopify.com/s/files/1/0775/2687/products/136f4381d0ec3f37f4cf7839a822b7c0aee6c617_530x@2x.jpg?v=1520319467', alt='')
+                            img.img-fluid(src='#{items.images[1]}', alt='')
                     .col-lg-6
-                        a.portfolio-item(href='/latte')
+                        a.portfolio-item(href='#{items.scenes[1].url}')
                             span.caption
                                 span.caption-content
-                                    h2 #{latte.InventoryName}
+                                    h2 #{items.scenes[1].name}
                                     p.mb-0
-                            img.img-fluid(src='https://d1alt1wkdk73qo.cloudfront.net/images/guide/05ddb8fbb5bd7b302fdc48b5cced7512/640x478_ac.jpg', alt='')
+                            img.img-fluid(src=' #{items.images[2]}', alt='')
                     .col-lg-6
-                        a.portfolio-item(href='/mocha')
+                        a.portfolio-item(href='#{items.scenes[2].url}')
                             span.caption
                                 span.caption-content
-                                    h2 #{mocha.InventoryName}
+                                    h2 #{items.scenes[2].name}
                                     p.mb-0
-                            img.img-fluid(src='https://img.taste.com.au/ahzHXQxh/w720-h480-cfill-q80/taste/2016/11/devilish-hot-chocolate-mocha-34999-1.jpeg}', alt='')
+                            img.img-fluid(src='#{items.images[3]}', alt='')
                     .col-lg-6
-                        a.portfolio-item(href='/cappuccino')
+                        a.portfolio-item(href='#{items.scenes[3].url}')
                             span.caption
                                 span.caption-content
-                                    h2 #{cappuccino.InventoryName}
+                                    h2 #{items.scenes[3].name}
                                     p.mb-0
-                            img.img-fluid(src='https://wallingfordcoffee.com/wp-content/uploads/2014/11/product-capp.jpg', alt='')
+                            img.img-fluid(src='#{items.images[4]}', alt='')
 
 
         // Call to Action
         section.content-section.bg-primary.text-white
             .container.text-center
-                h2.mb-4 About
+                h2.mb-4 Contact
                 i.fa.fa-external-link(aria-hidden='true')
-                a(href='/about') &nbsp;Official Website
+                a(href='#{items.website[2]}') &nbsp;Official Website
                 | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 i.fa.fa-phone(aria-hidden='true')
-                |   &nbsp;+1 123456789
+                |   &nbsp;+1 #{items.info[1]}
         // Map
         section#contact.map
-            iframe(width='100%', height='100%', frameborder='0', scrolling='no', marginheight='0', marginwidth='0', src='https://www.google.com/maps/embed/v1/place?key=AIzaSyD24HTaCZNl759ZbQduQKfitIi2hOCAULw&q=sanjose' allowfullscreen)
+            iframe(width='100%', height='100%', frameborder='0', scrolling='no', marginheight='0', marginwidth='0', src='https://www.google.com/maps/embed/v1/place?key=AIzaSyD24HTaCZNl759ZbQduQKfitIi2hOCAULw&q=#{items.name}' allowfullscreen)
             br
             small
-                a(href='https://maps.google.com/maps?f=q&source=embed&hl=en&geocode=&q=sanjose')
+                a(href='https://maps.google.com/maps?f=q&source=embed&hl=en&geocode=&q=#{items.name}')
         // Footer
         footer.footer.text-center
             .container
                 ul.list-inline.mb-5
                     li.list-inline-item
-                        a.social-link.rounded-circle.text-white.mr-3(href='https://www.facebook.com')
+                        a.social-link.rounded-circle.text-white.mr-3(href='https://www.facebook.com/TourGuide-132179940786791/')
                             i.fa.fa-facebook(aria-hidden='true')
                     li.list-inline-item
-                        a.social-link.rounded-circle.text-white.mr-3(href='https://twitter.com')
+                        a.social-link.rounded-circle.text-white.mr-3(href='https://twitter.com/TourGuide_280')
                             i.fa.fa-twitter(aria-hidden='true')
                     li.list-inline-item
                         a.social-link.rounded-circle.text-white(href='https://www.github.com')
                             i.fa.fa-github(aria-hidden='true')
-                p.text-muted.small.mb-0 Copyright © Old Drivers
+                p.text-muted.small.mb-0 Copyright © Team 404
 
         // Bootstrap JavaScript
         script(src='https://code.jquery.com/jquery-3.1.1.slim.min.js', integrity='sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n', crossorigin='anonymous')

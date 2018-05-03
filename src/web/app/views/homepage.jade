@@ -24,9 +24,9 @@ html(lang='en')
             $( function() {
                 var availableTags = [
                     "Americano",
-                    "Latte",
+                    "Cappuccino",
                     "Mocha",
-                    "Cappuccino"
+                    "Latte"
                 ];
                 $( "#tags" ).autocomplete({
                     source: availableTags
@@ -51,9 +51,10 @@ html(lang='en')
                     li.nav-item
                         a.nav-link(href='/contact') Contact
                     li.nav-item
-                        a.nav-link(href='/order') Order
-                    li.nav-item
-                        a.nav-link(href='/review') Review
+                        if user
+                            a.nav-link(href='/order') Order
+                        else
+                            a.nav-link(href='/') 
 
 
                 form.form-inline.mt-2.mt-md-0(action='/search', method='post')
@@ -65,7 +66,7 @@ html(lang='en')
                 ul.navbar-nav.justify-content-end
                     li.nav-item
                     if user
-                        a.nav-link(href='/home') Hello, !
+                        a.nav-link(href='/home') Hello, #{user.firstName}!
                     else
                         a.nav-link(href='/login') Join Us
 
@@ -84,7 +85,7 @@ html(lang='en')
                                 | go ahead and grab that cup of joe, or two, or more. 
                                 | Doing so may improve your health and help you live longer.
                             p
-                                a.btn.btn-lg.btn-primary(href='/latte', role='button') Details
+                                a.btn.btn-lg.btn-primary(href='/', role='button') Details
                 .carousel-item
                     img.second-slide(src='images/homeslide2.jpg', alt='Second slide')
                     .container
@@ -93,18 +94,18 @@ html(lang='en')
                             p
                                 | 7 Facts About Coffee You Probably Didn’t Know
                             p
-                                a.btn.btn-lg.btn-primary(href='/mocha', role='button') Explore Seattle
+                                a.btn.btn-lg.btn-primary(href='/', role='button') Explore Seattle
                 .carousel-item
-                    img.third-slide(src='images/homeslide3.jpg', alt='Third slide')
+                    img.third-slide(src='images/homeslide4.jpg', alt='Third slide')
                     .container
                         .carousel-caption.d-none.d-md-block.text-right
                             h1 Join The Group
                             p
                                 i Coffee is a diuretic
                             p
-                                i by Coffee
+                                i by No one
                             p
-                                a.btn.btn-lg.btn-primary(href='/americano', role='button') Plan your tour
+                                a.btn.btn-lg.btn-primary(href='/san-diego', role='button') Plan your tour
             a.carousel-control-prev(href='#myCarousel', role='button', data-slide='prev')
                 span.carousel-control-prev-icon(aria-hidden='true')
                 span.sr-only Previous
@@ -112,9 +113,6 @@ html(lang='en')
                 span.carousel-control-next-icon(aria-hidden='true')
                 span.sr-only Next
 
-
-
-        
         // Card component
         //.row.align-self-center.justify-content-center
             .col-sm-3
@@ -150,17 +148,14 @@ html(lang='en')
                             | National Recreation Area; it is open to tours. Visitors can reach the island by ferry ride from Pier 33,
                             | near Fisherman's Wharf, San Francisco. Hornblower Cruises and Events, operating under the
                             | name Alcatraz Cruises, is the official ferry provider to and from the island.
-                        a.btn.btn-primary(href='/alcatraz') Details 
-        
+                        a.btn.btn-primary(href='/alcatraz') Details
 
-        
-
-        //hr.featurette-divider
+        hr.featurette-divider
 
         .row.featurette
             .col-md-1
             .col-md-7
-                h2.featurette-heading Share your Travel Experiences
+                h2.featurette-heading Share your Experiences
                 p
                     | Have you visited a place, if yes then share your reviews about the places you visited. Help your fellow spartans!! Let them know how to plan the trip? What are the famous spots to visit? Where to eat? How to reach there?
             .col-md-3
@@ -185,15 +180,13 @@ html(lang='en')
             .col-md-1
             .col-md-7
                 h2.featurette-heading
-                    | Gather Information for your next trip
+                    | Gather Information
                 p.lead Planning to visit a new place, but so much information on the Internet confuses you. Take help of your fellow spartans. They have shared their experiences and reviews which will help you plan your next trip.
             .col-md-3
                 img.featurette-image.img-fluid.mx-auto(src='images/features3.jpg', alt='placeholder image')
             .col-md-1
 
         hr.featurette-divider
-
-        
 
         // Footer
         footer.footer.text-center
@@ -208,7 +201,7 @@ html(lang='en')
                     li.list-inline-item
                         a.social-link.rounded-circle.text-white(href='https://www.github.com')
                             i.fa.fa-github(aria-hidden='true')
-                p.text-muted.small.mb-0 Copyright © Old Drivers
+                p.text-muted.small.mb-0 Copyright © Team 404
 
         // Bootstrap JavaScript
         script(src='https://code.jquery.com/jquery-3.1.1.slim.min.js', integrity='sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n', crossorigin='anonymous')

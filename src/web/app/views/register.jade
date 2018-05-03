@@ -7,9 +7,11 @@ block content
 				h1.text-center.login-title Registration Details
 					div.signup-wall
 						form(class='form-signin', action='/signup', method='POST')
-							input(type='text', name='name', class='form-control', placeholder='Name',required, autofocus)
-							input(type='text', name='phone', class='form-control nomargin', placeholder='Phone', required)
-							input(type='text', name='balance', class='form-control', placeholder='Balance',required)
+							input(type='text', name='username', class='form-control', placeholder='Username',required, autofocus)
+							input(type='password', name='password', class='form-control nomargin', placeholder='Password', required)
+							input(type='email', name='email', class='form-control', placeholder='Email',required)
+							input(type='text', name='firstName', class='form-control', placeholder='First Name',required)
+							input(type='text', name='lastName', class='form-control', placeholder='Last Name',required)
 							button(class='btn btn-lg btn-primary btn-block', type='submit') Register
 							span.clearfix
 					#message

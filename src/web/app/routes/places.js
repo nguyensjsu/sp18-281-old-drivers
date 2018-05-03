@@ -1,138 +1,235 @@
 var express = require('express');
 var router = express.Router();
-// var Place = require('../models/place');
-// var ObjectId = require('mongodb').ObjectId;
-var Request = require("request");
-
+var Place = require('../models/place');
+var ObjectId = require('mongodb').ObjectId;
 
 router.get('/about', function(req, res, next) {
 
-        res.render('about',{});
+    res.render('about',{});
 
 });
 
+router.get('/order', function(req, res, next) {
+
+    var date = new Date();
+
+    var hour = date.getHours();
+    hour = (hour < 10 ? "0" : "") + hour;
+
+    var min  = date.getMinutes();
+    min = (min < 10 ? "0" : "") + min;
+
+    var sec  = date.getSeconds();
+    sec = (sec < 10 ? "0" : "") + sec;
+
+    var year = date.getFullYear();
+
+    var month = date.getMonth() + 1;
+    month = (month < 10 ? "0" : "") + month;
+
+    var day  = date.getDate();
+    day = (day < 10 ? "0" : "") + day;
+
+
+    var time = year + ":" + month + ":" + day + ":" + hour + ":" + min + ":" + sec;
+    res.render('order', {time: time})
+
+});
 
 router.get('/product', function(req, res, next) {
 
-    var latte, americano, mocha, cappuccino
-
-    // latte
-    Request.get("http://18.144.40.71:8000/inventory/inventory/96d8492a-802f-4f0a-9b04-f82ef5a16e2f", (error, response, body) => {
-        if(error) {
-           return console.dir(error);
-        }
-        console.dir(JSON.parse(body));
-
-        latte = JSON.parse(body)
-
-        
+    Place.findOne({'name': 'Product'}, function(err, doc){
+        res.render('cities_test', {items: doc, user:req.user});
     });
-
-    // americano
-    Request.get("http://18.144.40.71:8000/inventory/inventory/5d85f3eb-8576-44e3-b075-bc28129cbd8f", (error, response, body) => {
-        if(error) {
-           return console.dir(error);
-        }
-        console.dir(JSON.parse(body));
-
-        americano = JSON.parse(body)
-
-    });
-
-    // mocha
-    Request.get("http://18.144.40.71:8000/inventory/inventory/5feecca7-bbd5-494e-be2a-1ca4bd469d4e", (error, response, body) => {
-        if(error) {
-           return console.dir(error);
-        }
-        console.dir(JSON.parse(body));
-
-        mocha = JSON.parse(body)
-
-    });
-
-    // cappuccino
-    Request.get("http://18.144.40.71:8000/inventory/inventory/f3ef10b1-b937-458b-9ee2-5a90b1ca0936 ", (error, response, body) => {
-        if(error) {
-           return console.dir(error);
-        }
-        console.dir(JSON.parse(body));
-
-        cappuccino = JSON.parse(body)
-
-    });
-
-    res.render('product', {latte: latte, americano: americano, mocha: mocha, cappuccino: cappuccino})
-
 });
-
 
 router.get('/americano', function(req, res, next) {
 
-    /*
-    Request.get("http://18.144.40.71:8000/inventory/inventory/5d85f3eb-8576-44e3-b075-bc28129cbd8f", function (error, response, body) {
-        if(body == "Inventory not exist") {
-           return console.dir("error");
-        }
-        console.dir(JSON.parse(body));
-
-        result = JSON.parse(body)*/
-
-        res.render('detail',{});
-      
-    //});
-
-});
-
-
-
-
-router.get('/latte', function(req, res, next) {
-
-    Request.get("http://18.144.40.71:8000/inventory/inventory/96d8492a-802f-4f0a-9b04-f82ef5a16e2f", function (error, response, body) {
-        if(error) {
-           return console.dir(error);
-        }
-        // console.dir(JSON.parse(body));
-
-        // result = JSON.parse(body)
-
-        res.render('detail',{inventory: body});
+    Place.findOne({'name': 'Americano'}, function(err, doc){
+        res.render('places_test', {items: doc, user:req.user});
     });
-
-});
-
-router.get('/mocha', function(req, res, next) {
-
-    Request.get("http://18.144.40.71:8000/inventory/inventory/5feecca7-bbd5-494e-be2a-1ca4bd469d4e", function (error, response, body) {
-        if(error) {
-           return console.dir(error);
-        }
-        console.dir(JSON.parse(body));
-
-        result = JSON.parse(body)
-
-        res.render('detail',{inventory: result});
-    });
-
 });
 
 router.get('/cappuccino', function(req, res, next) {
 
-    Request.get("http://18.144.40.71:8000/inventory/inventory/f3ef10b1-b937-458b-9ee2-5a90b1ca0936", function (error, response, body) {
-        if(error) {
-           return console.dir(error);
-        }
-        console.dir(JSON.parse(body));
-
-        result = JSON.parse(body)
-
-        res.render('detail',{inventory: result});
+    Place.findOne({'name': 'Cappuccino'}, function(err, doc){
+        res.render('places_test', {items: doc, user:req.user});
     });
+});
 
+router.get('/mocha', function(req, res, next) {
+
+    Place.findOne({'name': 'Mocha'}, function(err, doc){
+        res.render('places_test', {items: doc, user:req.user});
+    });
+});
+
+router.get('/latte', function(req, res, next) {
+
+    Place.findOne({'name': 'Latte'}, function(err, doc){
+        res.render('places_test', {items: doc, user:req.user});
+    });
 });
 
 
-// invoke add review api
+/*
+router.get('/seattle', function(req, res, next) {
+
+    Place.findOne({'name': 'Seattle'}, function(err, doc){
+        res.render('cities_test', {items: doc, user:req.user});
+    });
+});
+
+router.get('/san-diego', function(req, res, next) {
+
+    Place.findOne({'name': 'San Diego'}, function(err, doc){
+        res.render('cities_test', {items: doc, user:req.user});
+    });
+});
+
+router.get('/san-francisco', function(req, res, next) {
+
+    Place.findOne({'name': 'San Francisco'}, function(err, doc){
+        res.render('cities_test', {items: doc, user:req.user});
+    });
+});
+
+router.get('/los-angeles', function(req, res, next) {
+
+    Place.findOne({'name': 'Los Angeles'}, function(err, doc){
+        res.render('cities_test', {items: doc, user:req.user});
+    });
+});
+
+router.get('/golden-gate-bridge', function(req, res, next) {
+
+    Place.findOne({'name': 'Golden Gate Bridge'}, function(err, doc){
+        res.render('places_test', {items: doc, user:req.user});
+    });
+});
+
+router.get('/alcatraz', function(req, res, next) {
+
+    Place.findOne({'name': 'Alcatraz'}, function(err, doc){
+        res.render('places_test', {items: doc, user:req.user});
+    });
+});
+
+router.get('/lake-tahoe', function(req, res, next) {
+
+    Place.findOne({'name': 'Lake Tahoe'}, function(err, doc){
+        res.render('places_test', {items: doc, user:req.user});
+    });
+});
+
+router.get('/yosemite-national-park', function(req, res, next) {
+
+    Place.findOne({'name': 'Yosemite National Park'}, function(err, doc){
+        res.render('places_test', {items: doc, user:req.user});
+    });
+});
+
+router.get('/napa-valley', function(req, res, next) {
+
+    Place.findOne({'name': 'Napa Valley'}, function(err, doc){
+        res.render('places_test', {items: doc, user:req.user});
+    });
+});
+
+router.get('/mendocino-coast', function(req, res, next) {
+
+    Place.findOne({'name': 'Mendocino Coast'}, function(err, doc){
+        res.render('places_test', {items: doc, user:req.user});
+    });
+});
+
+router.get('/uss-midway-museum', function(req, res, next) {
+
+    Place.findOne({'name': 'USS Midway Museum'}, function(err, doc){
+        res.render('places_test', {items: doc, user:req.user});
+    });
+});
+
+
+router.get('/la-jolla-cove', function(req, res, next) {
+
+    Place.findOne({'name': 'La Jolla Cove'}, function(err, doc){
+        res.render('places_test', {items: doc, user:req.user});
+    });
+});
+
+router.get('/universal-studios-hollywood', function(req, res, next) {
+
+    Place.findOne({'name': 'Universal Studios Hollywood'}, function(err, doc){
+        res.render('places_test', {items: doc, user:req.user});
+    });
+});
+
+router.get('/disneyland-park', function(req, res, next) {
+
+    Place.findOne({'name': 'Disneyland Park'}, function(err, doc){
+        res.render('places_test', {items: doc, user:req.user});
+    });
+});
+
+router.get('/griffith-observatory', function(req, res, next) {
+
+    Place.findOne({'name': 'Griffith Observatory'}, function(err, doc){
+        res.render('places_test', {items: doc, user:req.user});
+    });
+});
+
+router.get('/six-flags-magic-mountain', function(req, res, next) {
+
+    Place.findOne({'name': 'Six Flags Magic Mountain'}, function(err, doc){
+        res.render('places_test', {items: doc, user:req.user});
+    });
+});
+
+router.get('/chihuly-garden-and-glass', function(req, res, next) {
+
+    Place.findOne({'name': 'Chihuly Garden and Glass'}, function(err, doc){
+        res.render('places_test', {items: doc, user:req.user});
+    });
+});
+
+router.get('/pike-place-market', function(req, res, next) {
+
+    Place.findOne({'name': 'Pike Place Market'}, function(err, doc){
+        res.render('places_test', {items: doc, user:req.user});
+    });
+});
+
+router.get('/space-needle', function(req, res, next) {
+
+    Place.findOne({'name': 'Space Needle'}, function(err, doc){
+        res.render('places_test', {items: doc, user:req.user});
+    });
+});
+
+router.get('/washington-state-ferries', function(req, res, next) {
+
+    Place.findOne({'name': 'Washington State Ferries'}, function(err, doc){
+        res.render('places_test', {items: doc, user:req.user});
+    });
+});
+
+router.get('/san-diego-zoo', function(req, res, next) {
+
+    Place.findOne({'name': 'San Diego Zoo'}, function(err, doc){
+        res.render('places_test', {items: doc, user:req.user});
+    });
+});
+
+
+router.get('/balboa-park', function(req, res, next) {
+
+    Place.findOne({'name': 'Balboa Park'}, function(err, doc){
+        res.render('places_test', {items: doc, user:req.user});
+    });
+});
+*/
+
 router.post('/addReview', function (req, res, next) {
     console.log(req.body);
 
@@ -146,7 +243,7 @@ router.post('/addReview', function (req, res, next) {
         updated.reviews.push(newReview);
         updated.save();
 
-        res.render('detail', {items: updated, user:req.user});
+        res.render('places_test', {items: updated, user:req.user});
 
     });
 
