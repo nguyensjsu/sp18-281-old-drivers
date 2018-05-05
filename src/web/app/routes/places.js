@@ -59,7 +59,7 @@ router.get('/post_order', function(req, res, next) {
 
 
     var time = year + ":" + month + ":" + day + ":" + hour;// + ":" + min + ":" + sec;
-    res.render('order', {time: time})
+    res.render('post_order', {time: time})
 
 });
 
@@ -80,7 +80,7 @@ router.get('/americano', function(req, res, next) {
 router.get('/cappuccino', function(req, res, next) {
 
     Place.findOne({'name': 'Cappuccino'}, function(err, doc){
-        res.render('places_test', {items: doc, user:req.user});
+        res.render('places', {items: doc, user:req.user});
     });
 });
 

@@ -45,8 +45,10 @@ html(lang='en')
                     li.nav-item
                         a.nav-link(href='/contact') Contact
                     li.nav-item
-                        a.nav-link(href='/post_order') Order
-                        
+                        if user
+                            a.nav-link(href='/post_order') Order
+                        else
+                            a.nav-link(href='/') 
 
                 form.form-inline.mt-2.mt-md-0
                     .ui-widget
@@ -60,22 +62,107 @@ html(lang='en')
                             a.nav-link(href='/login') Join Us
 
 
+        .container-fluid
+            .row
+                .col-1
+                .col-10
+                    h2 #{items.name}
+                    hr
+
+
+            .row.justify-content-center
+                .col-5
+                    h4 Price
+                    p $ #{items.website}
+
+                    hr
+
+                    h4 Amount
+                    //i.fa.fa-external-link(aria-hidden='true')
+                    //a(href='#{items.website}') Website
+                    //br
+                    i.fas.fa-dollar-sign(aria-hidden='true')
+                    |   left: #{items.info[1]}
+
+                    hr
+
+                    h4 Other Products
+                    for scene in items.scenes
+                        i.fa.fa-external-link(aria-hidden='true')
+                        a(href='#{scene.url}') #{scene.name}
+                        br
+
+                    hr
+
+                    //button.btn.btn-primary.btn-lg.float-left(type='button', onclick='/addOrder') Buy
+
+                    
+                    // Trigger the modal with a button
+                    button.btn.btn-primary.btn-lg.float-left(type='button', data-toggle='modal', data-target='#myModal')  Buy
+                    // Modal
+                    #myModal.modal.fade(role='dialog')
+                        .modal-dialog
+                            // Modal content
+                            .modal-content
+                                .modal-header
+                                    button.close(type='button', data-dismiss='modal') ×
+                                    h4.modal-title 
+                                .modal-body
+                                    if user
+                                        p Order Placed
+                                    else 
+                                        p Log in to place order 
+                                .modal-footer
+                                    button.btn.btn-default(type='button', data-dismiss='modal') Close
+
+                .col-5#pics
+                    iframe(width='100%', height='450px', frameborder='0', style='border:0', 
+                    src='#{items.images[0]}')
+                    //iframe(width='100%', height='450px', frameborder='0', style='border:0', src='https://www.google.com/maps/embed/v1/place?key=AIzaSyD24HTaCZNl759ZbQduQKfitIi2hOCAULw&q=#{items.name}', allowfullscreen)
+
+
+        hr
+
+
+        //.container#slide
+            .map.map-1(style="background-image:url('#{items.images[0]}')")
+            .map.map-2(style="background-image:url('#{items.images[1]}')")
+            .map.map-3(style="background-image:url('#{items.images[2]}')")
+
+
         hr
 
         .row.justify-content-center
             .col-md-8.comments
+
+
+
+                if user
+                    .comment-wrap
+                        .photo
+                            .avatar(style="background-image: url('https://s3.amazonaws.com/uifaces/faces/twitter/dancounsell/128.jpg')")
+                        .comment-block
+                            form(action='/addReview' method='post')
+                                input(name='place', value='#{items.name}', type='hidden')
+                                textarea(name='content', id='textarea1' cols='30', rows='3', placeholder='Add comment...')
+                                button.btn.icon-btn.btn-primary(type='submit')
+                                    i.fa.fa-share-square-o(aria-hidden='true')
+                                    span.img-circle.text-info
+                                    | Share
+
+                else
+
+
                 .float-right
 
-                //for review in items.reviews
-                .comment-wrap
-                    //.photo
-                        img.avatar(style="background-image: url('https://s3.amazonaws.com/uifaces/faces/twitter/dancounsell/128.jpg')")
-                    .comment-block Order detail
-                        p.comment-text 
-                        p.comment-text Americano 
-                        p $ 20
-                        .bottom-comment
-                            .comment-date #{time}
+                for review in items.reviews
+                    .comment-wrap
+                        .photo
+                            img.avatar(style="background-image: url('https://s3.amazonaws.com/uifaces/faces/twitter/dancounsell/128.jpg')")
+                        .comment-block
+                            p.comment-text #{review.content}
+                            .bottom-comment
+                                .comment-date #{review.createDate}
 
         hr
 
@@ -92,7 +179,7 @@ html(lang='en')
                     li.list-inline-item
                         a.social-link.rounded-circle.text-white(href='https://www.github.com')
                             i.fa.fa-github(aria-hidden='true')
-                p.text-muted.small.mb-0 Copyright © Old Drivers
+                p.text-muted.small.mb-0 Copyright © Team 404
 
 
 

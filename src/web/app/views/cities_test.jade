@@ -53,7 +53,8 @@ html(lang='en')
           .container.text-center.my-auto
             h1.mb-1 #{items.name}
             h3.mb-5
-              em #{items.description}
+                em We provide some best coffee in the market.
+              //em #{items.description}
           .overlay
 
         // Services
@@ -61,7 +62,7 @@ html(lang='en')
           .container
             .content-section-heading
               h3.text-secondary.mb-0 Services
-              h2.mb-5 Explore The City
+              h2.mb-5 Explore The Coffee
             .row
               .col-lg-3.col-md-6.mb-5.mb-lg-0
                 span.service-icon.rounded-circle.mx-auto.mb-3
@@ -69,19 +70,19 @@ html(lang='en')
                 h4
                   strong Restaurant
                 a(href='#{items.website[0]}')
-                    p.text-faded.mb-0 Looking for great local food!
+                    p.text-faded.mb-0 Looking for great local coffee!
               .col-lg-3.col-md-6.mb-5.mb-lg-0
                 span.service-icon.rounded-circle.mx-auto.mb-3
                     i.fa.fa-taxi.fa-3x(aria-hidden='true')
                 h4
-                  strong Transportation
+                  strong Delivery
                 a(href='#{items.website[1]}')
                     p.text-faded.mb-0 Get around in the city
               .col-lg-3.col-md-6.mb-5.mb-md-0
                 span.service-icon.rounded-circle.mx-auto.mb-3
                     i.fa.fa-university.fa-3x(aria-hidden='true')
                 h4
-                  strong Government
+                  strong Cooperation
                 a(href='#{items.website[2]}')
                     p.text-faded.mb-0
                     | We&nbsp;
@@ -91,7 +92,7 @@ html(lang='en')
                 span.service-icon.rounded-circle.mx-auto.mb-3
                     i.fa.fa-thermometer-empty.fa-3x(aria-hidden='true')
                 h4
-                  strong Weather
+                  strong Varity
                 a(href='#{items.website[3]}')
                     p.text-faded.mb-0 Stay with comfort
 
@@ -100,7 +101,7 @@ html(lang='en')
         section#portfolio.content-section
             .container
                 .content-section-heading.text-center
-                    h3.text-secondary.mb-0 CITY
+                    h3.text-secondary.mb-0 COFFEE
                     h2.mb-5 We we offer
                 .row.no-gutters
                     .col-lg-6
@@ -130,7 +131,7 @@ html(lang='en')
                                 span.caption-content
                                     h2 #{items.scenes[3].name}
                                     p.mb-0
-                            img.img-fluid(src='#{items.images[4]}', alt='')
+                            img.img-fluid(src='#{items.images[0]}', alt='')
 
 
         // Call to Action
@@ -161,7 +162,7 @@ html(lang='en')
                     li.list-inline-item
                         a.social-link.rounded-circle.text-white(href='https://www.github.com')
                             i.fa.fa-github(aria-hidden='true')
-                p.text-muted.small.mb-0 Copyright © Team 404
+                p.text-muted.small.mb-0 Copyright © Old Drivers
 
         // Bootstrap JavaScript
         script(src='https://code.jquery.com/jquery-3.1.1.slim.min.js', integrity='sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n', crossorigin='anonymous')
