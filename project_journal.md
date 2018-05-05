@@ -456,14 +456,43 @@ curl -i -X POST \
 ```
 
 ### 7. Deploy API Server (04/20/2018)
+Deploy GO API Server on each EC2 instance
+Order System
 ```
-On 52.53.251.248
+On 52.53.251.248:8080
 git clone https://github.com/nguyensjsu/team281-old-drivers.git
-
+./dep.sh // import dependency
+go install order
+./bin/order <config_file> // config file includes redis masters' addresses: <ip>:<port>
 ```
 
-### 8. Summary
----
+User Management system
+```
+On 18.188.63.102:8080
+git clone https://github.com/nguyensjsu/team281-old-drivers.git
+./dep.sh // import dependency
+go install user_management
+./bin/user_management <config_file> // config file includes redis masters' addresses: <ip>:<port>
+```
+
+Inventory system
+```
+54.219.141.59:8080
+git clone https://github.com/nguyensjsu/team281-old-drivers.git
+./dep.sh // import dependency
+go install inventory
+./bin/inventory <config_file> // config file includes redis masters' addresses: <ip>:<port>
+```
+
+Review system
+```
+54.218.74.6:8080
+git clone https://github.com/nguyensjsu/team281-old-drivers.git
+./dep.sh // import dependency
+go install review
+./bin/review <config_file> // config file includes redis masters' addresses: <ip>:<port>
+
+```
 
 ### Appendix
 ---
