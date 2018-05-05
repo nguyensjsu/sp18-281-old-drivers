@@ -442,7 +442,7 @@ curl -i -X POST \
     --data 'name=inventory-api' \
     --data 'uris=/inventory' \
     --data 'strip_uri=true' \
-    --data 'upstream_url=http://{XXX}:8080'
+    --data 'upstream_url=http://{54.219.141.59}:8080'
 ```
 
 * Add Review API Routing
@@ -450,9 +450,9 @@ curl -i -X POST \
 curl -i -X POST \
     --url http://18.144.40.71:8001/apis/ \
     --data 'name=review-api' \
-    --data 'uris=/review' \
+    --data 'uris=/reviews' \
     --data 'strip_uri=true' \
-    --data 'upstream_url=http://{XXX}:8080'
+    --data 'upstream_url=http://54.218.74.6:8080'
 ```
 
 ### 7. Deploy API Server (04/20/2018)
