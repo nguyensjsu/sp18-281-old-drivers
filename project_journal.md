@@ -44,7 +44,7 @@ Week5: (4/21/18-4/28/18)
 ```
 Week6: (4/28/18-5/4/18)
     * Weekly progress: Enhance GO API server, supporting data sharding, replication and consistency.
-    * Challenge:
+    * Challenge: Support isolation accross data shards, and maintain data consistency
 ```
 
 
@@ -432,7 +432,7 @@ curl -i -X POST \
     --data 'name=user-api' \
     --data 'uris=/user' \
     --data 'strip_uri=true' \
-    --data 'upstream_url=http://{XXX}:8080'
+    --data 'upstream_url=http://18.188.63.102:8080'
 ```
 
 * Add Inventory API Routing
